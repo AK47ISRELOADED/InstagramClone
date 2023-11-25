@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= user.username %></title>
+  <link rel="shortcut icon" href="/images/icons8-instagram-32.png" type="image/x-icon">
+  <link rel="stylesheet" href="/stylesheets/profile.css">  
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+</head>
+<body>
+  <div id="side-bar">
+    <a href=""><i class="ri-instagram-line"></i> <h5>instagram</h5> </a>
+    
+    
+    <a href="/feed"><i class="ri-home-heart-line"></i> <h5>home</h5></a>
+    
+    <a href=""><i class="ri-search-2-line"></i> <h5>search</h5></a>
+
+    <a href=""><i class="ri-movie-line"></i>  <h5>reels</h5>  </a>
+    <a href="/createPost"><i class="ri-add-box-line"></i> <h5>create</h5></a>
+    <a href=""><img src="<%= user.image %>" alt=""> </a>
+  
+
+
+    <a href=""><i class="ri-menu-5-line"></i> <h5>menu</h5></a>
+  </div>
+  <div id="main">
+    <div id="profile">
+      <div id="profile-image">
+        <img src="<%= user.image %>" alt="">
+      </div>
+      <div id="profile-info">
+       <div id="line1">
+        <h2><%= user.username %></h2>
+        <h5>Edit profile</h5>
+        <i class="ri-settings-3-fill"></i>
+       </div>
+       <div id="line2">
+        <h4><%= user.post.length %> post</h4>
+        <h4><%= user.follower.length %> follower</h4>
+        <h4><%= user.following.length %> folowing</h4>
+       </div>
+       <div id="line3">
+        <h3><%= user.name %></h3>
+       </div>
+       <div id="line4">
+        <h3>bio</h3>
+       </div>
+      </div>
+    </div>
+
+    <hr>
+    <div id="posts">
+     <div id="heads">
+      <h6 id="post-tag"><i class="ri-grid-line"></i> posts</h6>
+      <h6 id="reels-tag"><i class="ri-movie-line"></i> reels</h6>
+      <h6 id="saved-tag"><i class="ri-bookmark-line"></i> saved</h6>
+     </div>
+ 
+     <div id="post-gallery">
+      <% user.post.forEach(post=>{ %>
+        <div class="post-card">
+          <img src="<%= post.media %>" alt="video">   
+          <h4><%= post.likes.length %><i class="ri-heart-line"></i>  <%= post.comments.length %><i class="ri-chat-3-line"></i>  </h4>     
+    
+        </div>
+         <%  }) %>
+     </div>
+
+     <div id="reels-gallery">
+      <% user.post.forEach(post=>{ %>
+        <div class="reels-card">
+         
+      <video autoplay muted loop height="500px" width="500px" >
+        <source src="">
+      </video>
+        
+        </div>
+     
+         <%  }) %>
+     </div>
+
+
+     <div id="saved-gallery">
+      <% user.savedPosts.forEach(post=>{ %>
+        <div class="saved-card">
+          <h1><%=post%></h1>
+         <img src="<%= post.media %>" alt="">
+        </div>
+     
+         <%  }) %>
+     </div>
+    
+    </div>
+
+  </div>
+
+  <script>
+    document.querySelector('#reels-tag').addEventListener('click',function(){
+      document.querySelector('#reels-gallery').style.display = 'grid';
+      document.querySelector('#post-gallery').style.display = 'none';
+      document.querySelector('#saved-gallery').style.display = 'none';
+    })
+    document.querySelector('#saved-tag').addEventListener('click',function(){
+      document.querySelector('#reels-gallery').style.display = 'none';
+      document.querySelector('#post-gallery').style.display = 'none';
+      document.querySelector('#saved-gallery').style.display = 'grid';
+    })
+    document.querySelector('#post-tag').addEventListener('click',function(){
+      document.querySelector('#reels-gallery').style.display = 'none';
+      document.querySelector('#post-gallery').style.display = 'grid';
+      document.querySelector('#saved-gallery').style.display = 'none';
+    })
+   
+  </script>
+</body>
+</html>

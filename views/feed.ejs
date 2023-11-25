@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/stylesheets/feed.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+
+</head>
+<body>
+  <div id="side-bar">
+
+
+    <a href=""><i class="ri-instagram-line"></i> <h5>instagram</h5> </a>
+    
+    
+    <a href="/feed"><i class="ri-home-heart-line"></i> <h5>home</h5></a>
+    
+    <a href="/search"> <i  class="ri-search-2-line"><h5>search</h5></i> </a>
+
+    <a href=""><i class="ri-movie-line"></i>  <h5>reels</h5>  </a>
+    <a href="/createPost"><i class="ri-add-box-line"></i> <h5>create</h5></a>
+    <a href="/profile"><img src="<%= currentUser.image %>" alt=""> </a>
+  
+
+
+    <a href=""><i class="ri-menu-5-line"></i> <h5>menu</h5></a>
+  </div>
+
+
+
+  <div id="main">
+
+    <div id="story-bar">
+      <div class="upload-story">
+        <h1>Create Story</h1>
+        <form action="/createStory" method="post">
+          <input type="text" name="media" placeholder="upload story" />
+          <input
+            type="text"
+            name="caption"
+            placeholder="write story caption"
+          />
+          <button>submit</button>
+        </form>
+        <i id="close-upload-story" class="ri-close-line"></i>
+      </div>
+      <div id="stories">
+        <div class="add-story">
+          <img src="<%= currentUser.image %>"  alt="" />
+          <i id="open-add-story" class="ri-add-fill"></i>
+        </div>
+        <div class="user-stories">
+          <% allStories.forEach(function(story){ %>
+          <div class="story">
+            <img id="story-img1" src="<%= story.user.image %>" alt="" />
+          </div>
+          <% }) %>
+        </div>
+      </div>
+      <div class="big-story">
+
+
+        <% allStories.forEach(function(story){ %>
+        <div class="story-big">
+          <i id="next-story" class="ri-arrow-right-s-fill"></i>
+          <i id="p-story" class="ri-arrow-left-s-fill"></i>
+
+          <div class="story-detail">
+            <div class="story-detail-1">
+              <a href="/feed"><i class="ri-arrow-left-line"></i></a>
+
+              <img src="<%= story.user.image %>" alt="" />
+              <h3><%= story.user.username %></h3>
+            </div>
+            <div class="story-detail-2">
+              <i id="open-delete-story" class="ri-more-2-line"></i>
+              <div class="delete-story">
+                <a href="/deleteStory/<%= story._id %>">Delete Story</a>
+              </div>
+            </div>
+          </div>
+          <img id="story-photo" src="<%= story.media %>" alt="" />
+          <div class="story-review">
+            <input type="text" placeholder="Send Message" />
+            <% if(story.likes.includes(currentUser._id)){ %>
+            <i
+              id="story-like-btn"
+              style="color: red"
+              onclick="like('<%= story._id %>')"
+              class="ri-heart-3-fill"
+            ></i>
+            <% } else { %>
+            <i
+              id="story-like-btn"
+              onclick="like('<%= story._id %>')"
+              class="ri-heart-3-line"
+            ></i>
+            <% } %>
+            
+            <i class="ri-send-plane-fill"></i>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <div id="feed-area">
+
+      <% allposts.forEach(post=>{ %>
+    
+        <div id="feed-card">
+          <div id="nav">
+            <img id="mini" src="<%= post.user.image %>" alt="">
+          <h2><%= post.user.username %></h2>
+          <div class="more">
+            <!-- <a href="/follow/<%= post.user._id %>">
+              <i class="ri-user-shared-line"></i>
+            </a> -->
+            <i id="open-more-options" class="ri-more-2-line"></i>
+            <div class="more-option">
+              <a href=""><h4>Delete Post</h4></a>
+              <a href="/profile/<%= post.user._id %>"><h4>View Profile</h4></a>
+              <a href="/savepost/<%= post._id %>"><h4>Save Post</h4></a>
+            </div>
+          </div>
+          </div>
+          <hr>
+          <img id="feed-img" src="<%= post.media %>" alt="">
+          <div id="bottom">
+            <div id="line1">
+              <a href="/like/<%=post._id%>"> <%=post.likes.length%>             
+                <% if(post.likes.includes(currentUser._id)){ %>
+              <i
+                id="story-like-btn"
+                style="color: red"
+                class="ri-heart-3-fill"
+              ></i>
+              <% } else { %>
+              <i
+                id="story-like-btn"
+              
+                class="ri-heart-3-line"
+              ></i>
+              <% } %>
+              </a>
+              
+              <i id="comment-icon" class="ri-chat-3-line"></i>
+              <a href=""> <i class="ri-share-forward-line"></i></a>
+              <a href="/savepost/<%= post._id %>"> 
+                <% if(currentUser.savedPosts.includes(post._id)){ %>
+                  <i
+                    id="story-like-btn"
+                    style="color: #000"
+                    class="ri-bookmark-fill"
+                  ></i>
+                  <% } else { %>
+                  <i
+                    id="story-like-btn"
+                  
+                  class="ri-bookmark-line"
+                  ></i>
+                  <% } %></a>
+            </div>
+            <div id="line2">
+              <h3><%= post.user.username %></h3>
+              <h3><%= post.caption %></h3>
+            </div>
+            <div class="comment">
+              <h4 id="add-comment">Add a comment</h4>
+              <div class="comments-container">
+                <% post.comments.forEach(function(comment){ %>
+                <div class="comments">
+                  <div class="comment-profile">
+                    <img src="<%= comment.user.profilePic %>" alt="" />
+                  </div>
+                  <div class="comment-data">
+                    <h4><%= comment.user.username %></h4>
+                    <h3><%= comment.text %></h3>
+                    <small> <%= comment.createdAt.toLocaleString() %> </small>
+                  </div>
+                  <div class="comment-review">
+                    <a href=""><i class="ri-reply-line"></i></a>
+                    <a href="/likeComment/<%= comment._id %>"
+                      ><i class="ri-heart-line"></i
+                    ></a>
+                    <a href="/delete/<%= comment._id %>"
+                      ><i class="ri-delete-bin-7-fill"></i
+                    ></a>
+                  </div>
+                </div>
+                <% }) %>
+                <form action="/addComment/<%= post._id %>" method="post">
+                  <input
+                    id="comment-input"
+                    type="text"
+                    name="comment"
+                    placeholder="write comment to <%= post.user.username %>"
+                  />
+                </form>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        
+      <% }) %>
+
+    </div>
+
+  
+  </div>
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <script  src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"integrity="sha512-emSwuKiMyYedRwflbZB2ghzX8Cw8fmNVgZ6yQNNXXagFzFOaQmbvQ1vmDkddHjm5AITcBIZfC7k4ShQSjgPAmQ=="  crossorigin="anonymous"  referrerpolicy="no-referrer"></script>
+
+<script>
+  // CODE TO OPEN COMMENT INPUT FIELD
+
+  var clicks = 1;
+    document.querySelectorAll('#comment-icon').addEventListener("click", function (event) {
+    
+      if (clicks == 1) {
+       document.querySelector( "#comment-input" ).style.display = "flex";
+       console.log("clicked")
+        clicks = 2;
+      }
+      else if(clicks == 2) {
+        document.querySelector( "#comment-input").style.display = "none";
+        document.querySelector( "#main").style.display = "none";
+        
+        clicks = 1;
+      }
+    });
+
+
+  // CODE TO OPEN & CLOSE ADD STORY PAGE
+
+  document.querySelector("#open-add-story").addEventListener("click", function () {
+      document.querySelector(".upload-story").style.scale = "1";
+    });
+
+  document.querySelector("#close-upload-story").addEventListener("click", function () {
+      document.querySelector(".upload-story").style.scale = "0";
+    });
+
+  // CODE TO OPEN & CLOSE MORE OPTIONS
+
+  document.querySelectorAll("#open-more-options").forEach(function (openInput) {
+      var click = 1;
+      openInput.addEventListener("click", function (event) {
+         if (click == 1) {
+          event.target.parentElement.querySelector( ".more-option" ).style.scale = "1";
+          click = 2;
+        } else if (click == 2) {
+          event.target.parentElement.querySelector(
+            ".more-option"
+          ).style.scale = "0";
+          click = 1;
+        }
+      });
+    });
+
+  //CODE FOR FULL VIEW OF STORY
+
+  document.querySelectorAll(".story").forEach(function (BigStory) {
+    BigStory.addEventListener("click", function () {
+      document.querySelector(".big-story").style.scale = "1";
+    });
+  });
+
+  // AXIOS CODE FOR LIKING STORY
+
+  async function like(event,storyId) {
+    var response = await axios.get(`/likeStory/${storyId}`);
+    // console.log(response.data.status)
+    if(response.data.status == "liked"){
+        event.target.style.color = "red"
+    }
+    else{
+        event.target.style.color = "white"
+    }
+  }
+
+  // CODE FOR OPEN DELETE STORY
+
+  document.querySelectorAll("#open-delete-story").forEach(function (DeleteStory) {
+      var click = 1;
+      DeleteStory.addEventListener("click", function (open) {
+        if (click == 1) {
+          open.target.parentElement.querySelector(
+            ".delete-story"
+          ).style.scale = 1;
+          click = 2;
+        } else if (click == 2) {
+          open.target.parentElement.querySelector(
+            ".delete-story"
+          ).style.scale = 0;
+          click = 1;
+        }
+      });
+    });
+
+
+    var shift = '-94.5vw'
+
+    document.querySelector('#next-story').addEventListener('click',(e)=>{
+      document.querySelector('.big-story').style.marginLeft += shift
+    })
+    document.querySelector('#p-story').addEventListener('click',(e)=>{
+      document.querySelector('.big-story').style.marginRight += shift
+    })
+
+
+
+
+    // ---------------------------------------------------------------------
+
+    function reset() {
+        document.querySelectorAll(".suggestion").forEach(function (change) {
+          change.style.backgroundColor = "rgb(157, 161, 157)";
+          change.style.color = "white";
+        });
+        document
+          .querySelectorAll(".suggestion i")
+          .forEach(function (changeIcon) {
+            changeIcon.style.transform = "rotateX(0deg)";
+          });
+      }
+
+    
+
+
+
+   
+
+
+</script>
+</body>
+</html>
+  

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div style="margin-top: 100px;" class="container  p-4">
+    <h3>forgot password</h3>
+    <hr>
+  
+    <h5>please enter your registered email on which you want to receive the forgot password link.</h5>
+    <form action="/forgot" method="post">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Email address</label>
+          <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        <button type="submit" class="btn btn-success">Send Email</button>
+      </form>
+</div>   
+</body>
+</html>

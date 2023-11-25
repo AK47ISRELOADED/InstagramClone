@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<style>
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 4 version
+*/
+
+* {
+        margin: 0;
+        padding: 0;
+        -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+    }
+
+    html,
+    body {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: gilroy;
+        background-image: url(/images/instagram-background.jpg);
+        object-fit: cover;
+        background-position: center;
+    }
+
+    #main {
+        position: relative;
+        width: 30%;
+        height: 50%;
+        background-color:#fff;
+        border-radius: 20px;
+        border: 2px solid #000;   
+        padding: 10px 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #main h1{
+        text-align: center;
+        font-size: 20px;
+        text-transform: capitalize;
+        margin-bottom: 10px;
+    }
+    form{
+        padding: 20px;
+        gap: 10px;
+        display: flex;
+        flex-direction: column;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    input{
+        padding: 11px 60px;
+        border-radius: 20px;
+        margin-top: 20px;
+        /* outline: none; */
+        /* border: none; */
+    }
+    button{
+        border-radius: 20px;
+        width: 200px;
+        margin-top: 20px;
+        text-align: center;
+        padding: 10px 20px;
+    }
+    a{
+        position: absolute;
+        top: 3%;
+        font-size: 25px;
+        color: #000;
+        text-decoration: none;
+    }
+</style>
+
+<body>
+    <div id="main">
+        <div class="create-post">
+            <h1>create new post</h1>
+            <hr>
+            <form action="/createPost" method="post" >
+                <input type="text" name="media" placeholder="add post">
+                <input type="text" name="caption" placeholder="enter your caption">
+                <button>submit</button>
+            </form>
+            <a href="/feed"><i class="ri-arrow-left-line"></i></a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/search.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+</head>
+<body>
+    <div id="side-bar">
+
+
+        <a href=""><i class="ri-instagram-line"></i> <h5>instagram</h5> </a>
+        
+        
+        <a href="/feed"><i class="ri-home-heart-line"></i> <h5>home</h5></a>
+        
+        <a href="/search"> <i  class="ri-search-2-line"><h5>search</h5></i> </a>
+    
+        <a href=""><i class="ri-movie-line"></i>  <h5>reels</h5>  </a>
+        <a href="/createPost"><i class="ri-add-box-line"></i> <h5>create</h5></a>
+        <a href="/profile"><img src="<%= currentUser.image %>" alt=""> </a>
+      
+    
+    
+        <a href=""><i class="ri-menu-5-line"></i> <h5>menu</h5></a>
+      </div>
+
+
+    <div id="main">
+        <div id="search">
+            <input type="text" placeholder="search user" id="search-user" />
+            <i onclick="closeSearchDiv()" id="close-search-icon" class="ri-close-line"></i>
+            <hr>
+             <div id="user-area">
+
+             </div>
+        </div>      
+        <div id="feed">
+            <div id="various-suggestions">
+                <div id="for-you" class="suggestion">
+                  <h1>for you</h1>
+                  <i class="ri-arrow-down-s-line"></i>
+                </div>
+                <div onclick="openUsers()" id="open-user-accounts" class="suggestion">
+                  <h1>Accounts</h1>
+                  <i class="ri-arrow-down-s-line"></i>
+                </div>
+                <div onclick="openTrending()" class="suggestion">
+                  <h1>trending</h1>
+                  <i class="ri-arrow-down-s-line"></i>
+                </div>
+                <div onclick="openhashtags()" class="suggestion">
+                  <h1>Popular hashtags</h1>
+                  <i class="ri-arrow-down-s-line"></i>
+                </div>
+                <div onclick="openplaces()" class="suggestion">
+                  <h1>Places</h1>
+                  <i class="ri-arrow-down-s-line"></i>
+                </div>
+              </div>
+              <div class="users">
+                <div class="trending">
+                  <h1 id="same-h1">Reels</h1>
+                  <h1 id="same-h1">conflicts</h1>
+                  <h1 id="same-h1">Tourism</h1>
+                  <h1 id="same-h1">Movies</h1>
+                  <h1 id="same-h1">Web Series</h1>
+                  <h1 id="same-h1">Shows</h1>
+                </div>
+                <div class="popular-hashtags">
+                  <h1 id="same-h1">#temples</h1>
+                  <h1 id="same-h1">#kedarnath</h1>
+                  <h1 id="same-h1">#india</h1>
+                  <h1 id="same-h1">#israrelconflict</h1>
+                  <h1 id="same-h1">#pelestine</h1>
+                  <h1 id="same-h1">#likes</h1>
+                  <h1 id="same-h1">#commenst</h1>
+                  <h1 id="same-h1">#instagram</h1>
+                </div>
+                <div class="places">
+                  <h1 id="same-h1">#india</h1>
+                  <h1 id="same-h1">#bhopal</h1>
+                  <h1 id="same-h1">#madhya Pradesh</h1>
+                  <h1 id="same-h1">#israel</h1>
+                  <h1 id="same-h1">#uttrakhand</h1>
+                  <h1 id="same-h1">#delhi</h1>
+                  <h1 id="same-h1">#uttar Pradesh</h1>
+                </div>
+                <div class="all-users">
+                  <% allUsers.forEach(function(user){ %>
+                    <% if(currentUser.username == user.username){ %>
+                      <div style="display: none;" class="user-card">
+                        <img src="<%= user.image %>" alt="" />
+                        <h3><%= user.fullName %></h3>
+                        <% if(currentUser.following.includes(user._id)){ %>
+                          <a href="/follow/<%= user._id %>"><h2>following</h2></a>
+                        <% } else{ %>
+                        <a href="/follow/<%= user._id %>"><h2>Follow</h2></a>
+                        <% } %>
+                        <!-- <a href="/follow/<%= user._id %>"><h2>Follow</h2></a> -->
+                      </div>
+                    <% } else{ %>
+                      <div class="user-card">
+                        <img src="<%= user.image %>" alt="" />
+                        <h3><%= user.username %></h3>
+                        <% if(currentUser.following.includes(user._id)){ %>
+                          <a style="background-color: #18f261;" href="/follow/<%= user._id %>"><h2>following</h2></a>
+                        <% } else{ %>
+                        <a href="/follow/<%= user._id %>"><h2>Follow</h2></a>
+                        <% } %>
+                        <!-- <a href="/follow/<%= user._id %>"><h2>Follow</h2></a> -->
+                      </div>
+                    <% } %>
+                  <% }) %>
+                </div>
+              </div>
+              <div id="posts">
+                <% allposts.forEach(function(post){ %>
+                <div class="post">
+                  <img src="<%= post.media %>" alt="" />
+                </div>
+                <% }) %>
+              </div>
+          
+        </div>
+    </div>
+
+
+   
+ 
+
+
+    <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+    integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script
+  src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"
+  integrity="sha512-emSwuKiMyYedRwflbZB2ghzX8Cw8fmNVgZ6yQNNXXagFzFOaQmbvQ1vmDkddHjm5AITcBIZfC7k4ShQSjgPAmQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+  <script>
+    function reset() {
+      document.querySelectorAll(".suggestion").forEach(function (change) {
+        change.style.backgroundColor = "rgb(157, 161, 157)";
+        change.style.color = "white";
+      });
+      document
+        .querySelectorAll(".suggestion i")
+        .forEach(function (changeIcon) {
+          changeIcon.style.transform = "rotateX(0deg)";
+        });
+    }
+
+    document.querySelectorAll(".suggestion").forEach(function (style) {
+      style.addEventListener("click", function (event) {
+        closeUsers()
+        closeTrending()
+        closehashtags()
+        closeplaces()
+        reset();
+        event.target.parentElement.style.backgroundColor = "#1877F2";
+        event.target.parentElement.style.color = "black";
+        event.target.parentElement.querySelector(".suggestion i").style.transform = "rotateX(180deg)";
+      });
+    });
+
+    function openUsers() {
+      var tl = gsap.timeline();
+      tl.to(".users", {
+        height: "200px",
+        delay: 3,
+        duration: 0.1,
+      });
+      tl.to(".all-users",{
+        left: "0",
+        duration: .1
+      })
+      tl.to(".user-card", {
+        stagger: 0.1,
+        opacity: 1,
+      });
+    }
+
+    function closeUsers() {
+      var tl = gsap.timeline();
+      tl.to(".user-card", {
+        stagger: 0.1,
+        opacity: 0,
+        duration: .00001
+      });
+      tl.to(".all-users",{
+        left: "100%",
+        duration: .00001
+      })
+      tl.to(".users", {
+        height: "0px",
+        delay: 1,
+        duration: 0.00001,
+      });
+    }
+
+    function openTrending(){
+      var tl = gsap.timeline();
+      tl.to(".users", {
+        height: "70px",
+        delay: 3,
+        duration: 0.4,
+      });
+      tl.to(".trending",{
+        left: "0",
+        duration: .1
+      })
+      tl.to(".trending h1", {
+        stagger: 0.1,
+        opacity: 1,
+      });
+    }
+
+    function closeTrending() {
+      var tl = gsap.timeline();
+      tl.to(".trending h1", {
+        stagger: 0.1,
+        opacity: 0,
+        duration: .1
+      });
+      tl.to(".trending",{
+        left: "100%",
+        duration: .1
+      })
+      tl.to(".users", {
+        height: "0px",
+        delay: 1,
+        duration: 0.4,
+      });
+    }
+    
+    function openhashtags(){
+      var tl = gsap.timeline();
+      tl.to(".users", {
+        height: "70px",
+        delay: 3,
+        duration: 0.4,
+      });
+      tl.to(".popular-hashtags",{
+        left: "0",
+        duration: .1
+      })
+      tl.to(".popular-hashtags h1", {
+        stagger: 0.1,
+        opacity: 1,
+      });
+    }
+
+    function closehashtags() {
+      var tl = gsap.timeline();
+      tl.to(".popular-hashtags h1", {
+        stagger: 0.1,
+        opacity: 0,
+        duration: .1
+      });
+      tl.to(".popular-hashtags",{
+        left: "100%",
+        duration: .1
+      })
+      tl.to(".users", {
+        height: "0px",
+        delay: 1,
+        duration: 0.4,
+      });
+    }
+    
+    function openplaces(){
+      var tl = gsap.timeline();
+      tl.to(".users", {
+        height: "70px",
+        delay: 3,
+        duration: 0.4,
+      });
+      tl.to(".places",{
+        left: "0",
+        duration: .1
+      })
+      tl.to(".places h1", {
+        stagger: 0.1,
+        opacity: 1,
+      });
+    }
+
+    function closeplaces() {
+      var tl = gsap.timeline();
+      tl.to(".places h1", {
+        stagger: 0.1,
+        opacity: 0,
+        duration: .1
+      });
+      tl.to(".places",{
+        left: "100%",
+        duration: .1
+      })
+      tl.to(".users", {
+        height: "0px",
+        delay: 1,
+        duration: 0.4,
+      });
+    }
+
+    document.querySelector("#search-user").addEventListener("input",async function(event){
+      var response = await axios.post("/searchUser",{
+        data: event.target.value,
+      })
+      document.querySelector("#user-area").style.display = "initial"
+      var clutter = ``
+      response.data.searchedUser.forEach(function(user){
+        console.log(user)
+        clutter += `<div class="user-card2">
+                    <img style="width: 60px; height: 60px;" src="${user.image}" alt="" />
+                    <h3>${user.username}</h3>
+                    <% if(currentUser.following.includes("${user._id}")){ %>
+                      <a style="background-color: #18f261;" href="/follow/${user._id}"><h4>following</h4></a>
+                    <% } else{ %>
+                    <a href="/follow/${user._id}"><h4>Follow</h4></a>
+                    <% } %>
+                  </div>`
+      })
+
+      document.querySelector("#user-area").innerHTML = clutter;
+    })
+
+    function closeSearchDiv(){
+        document.querySelector("#user-area").style.display = "none"
+    }
+  </script>
+</body>
+</html>
