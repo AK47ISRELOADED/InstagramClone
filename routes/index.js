@@ -13,7 +13,9 @@ var mongoose=  require("mongoose");
 
 const crypto = require("crypto");
 
-const mailer = require("../nodemailer");
+
+
+const mailer = require("../nodemailer.js");
 
 const localStrategy = require("passport-local");
 
@@ -23,6 +25,7 @@ passport.use(new localStrategy(usermodel.authenticate()));
 const {Readable} = require('stream');
 var id3 = require('node-id3');
 const { futimesSync } = require('fs');
+const { render } = require('ejs');
 
 
 mongoose.connect("mongodb://127.0.0.1:27017/instagram").then(function(result){
@@ -31,8 +34,17 @@ mongoose.connect("mongodb://127.0.0.1:27017/instagram").then(function(result){
   console.log(err)
 })
 
-try{
+const conn = mongoose.connection;
+ var gfsBucket
+ conn.once('open',()=>{
+  gfsBucket = new mongoose.mongo.GridFSBucket(conn.db ,{
+    bucketName : 'media'
+  })
+ })
 
+
+
+try{
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -40,15 +52,23 @@ router.get('/', function(req, res, next) {
 });
 
 
+
+
 router.get('/feed',async function(req, res, next) {
 
-  var currentUser = await usermodel.findOne({ username:req.session.passport.user })
+  if (req.isAuthenticated()) {
+    var currentUser =  req.user;
+    // console.log(currentUser);
+    // rest of your code
+  } else {
+    // handle unauthenticated users
+    res.render('notfound')
+  }
   var allUsers = await usermodel.find();
-  var allposts = await postmodel.find().populate('user').populate('comments').populate({path: 'comments', populate:('user')});
-  var allStories = await storyModel.find().populate('user');
-  // var allUsers = allUser.
+  var allposts = await postmodel.find().sort({ createdAt: 1 }).populate('user').populate('comments').populate({path: 'comments', populate:('user')});
+  var allStories = await storyModel.find().populate('user')
+  
 
-  // console.log(allposts);
 
   res.render('feed',{currentUser,allposts,allStories,allUsers});
 });
@@ -56,10 +76,44 @@ router.get('/feed',async function(req, res, next) {
 
 
 
+
+router.get('/reel', async function(req, res, next) {
+  if (req.isAuthenticated()) {
+    var currentUser =  req.user;
+  } else {   
+    res.render('notfound')
+  }
+   var posts = await postmodel.find().sort({ createdAt: 1 }).populate('user').populate('comments').populate({path: 'comments', populate:('user')});
+   
+  res.render('reels',{posts,currentUser});
+});
+
+
+router.get('/reel/:reelid', async function(req, res, next) {
+  if (req.isAuthenticated()) {
+    var currentUser =  req.user;
+  } else {   
+    res.render('notfound')
+  }
+   var posts = await postmodel.find().sort({ createdAt: 1 }).populate('user').populate('comments').populate({path: 'comments', populate:('user')});
+   var personalreel = await postmodel.findOne({_id : req.params.reelid}).sort({ createdAt: 1 }).populate('user').populate('comments').populate({path: 'comments', populate:('user')});
+  
+
+  res.render('reelpersonal',{posts,personalreel,currentUser});
+});
+
+
+
+
+
 router.get('/search',async function(req, res, next) {
 
   
-  var currentUser = await usermodel.findOne({ username:req.session.passport.user })
+  if (req.isAuthenticated()) {
+    var currentUser =  (req.user)
+  } else {   
+    res.render('notfound')
+  }
   var allUsers = await usermodel.find();
   var allposts = await postmodel.find().populate('user').populate('comments').populate({path: 'comments', populate:('user')});
 
@@ -78,7 +132,7 @@ router.get("/storydelete", isLoggedIn, function(req, res, next){
 router.post("/searchUser", isLoggedIn,async function(req, res, next){
   // console.log(req.body.data);
   var searchedUser = await usermodel.find({
-    username: {$regex: req.body.data}
+    username: {$regex: (req.body.data)}
   })
   
   var curentUser = await usermodel.findOne({
@@ -89,14 +143,14 @@ router.post("/searchUser", isLoggedIn,async function(req, res, next){
 })
 
 
-router.post("/searchUser", isLoggedIn,async function(req, res, next){
-  console.log(req);
-  var searchedUser = await usermodel.find({
-    username: {$regex: req.body.data}
-  })
-  console.log(searchedUser);
-  // res.json({searchedUser});
-})
+// router.post("/searchUser", isLoggedIn,async function(req, res, next){
+//   // console.log(req);
+//   var searchedUser = await usermodel.find({
+//     username: {$regex: req.body.data}
+//   })
+//   // console.log(searchedUser);
+//   // res.json({searchedUser});
+// })
 
 
 
@@ -163,6 +217,25 @@ router.get("/deleteStory/:storyId",isLoggedIn,async function(req,res,next){
 
   res.redirect("/feed");
 })
+router.get("/deletepost/:postId",isLoggedIn,async function(req,res,next){
+  var Currentpost = await postmodel.findOne({_id: req.params.postId}).populate('user')
+
+  var loggedInUser = await usermodel.findOne({username: req.session.passport.user});
+
+  if(Currentpost.user.username == loggedInUser.username){
+    await postmodel.findOneAndDelete({
+      _id: req.params.postId
+    })
+  }
+  else{
+    // res.send("this story is not uploaded by you")
+    res.redirect("/warning")
+    return
+  }
+
+  res.redirect("/feed");
+})
+
 
 
 router.get("/warning", isLoggedIn, function(req, res, next){
@@ -180,18 +253,101 @@ router.get("/createPost", function(req, res, next){
 })
 
 
-router.post("/createPost", isLoggedIn, async (req, res, next) =>{
 
-  const allUsers = await usermodel.find()
 
-  const allPosts = await postmodel.find()
+// const storage = multer.memoryStorage()
+// const upload = multer({ storage: storage })
+
+// router.post('/createPost',upload.single('media') ,async (req,res,next)=>{
+//   // console.log(req.file);
+//   console.log(req.file.buffer);
+//   Readable.from(req.file.buffer).pipe(gfsBucket.openUploadStream(req.file.originalname))
+
+
+//   await postmodel.create({
+    
+// name: req.file.originalname,
+// media:req.file._id,
+// caption: req.body.caption,
+// user: req.user._id,
+// mediaType : req.file.mimetype ,
+
+//   })
+
+//  res.send('uploaded'); 
+// })
+
+
+
+// router.get('/stream/:musicName', async (req,res,next)=>{
+//   var currentSong = await postmodel.findOne({
+//     name: req.params.musicName,
+//   })
+  
+//   console.log(currentSong);
+
+//    const stream =  gfsBucket.openDownloadStreamByName(req.params.musicName)
+
+//    res.set('Content-Type', 'video/mp4')
+//    res.set('Content-Length', currentSong.size + 1)
+//    res.set('Content-Range', `bytes 0-${currentSong.size - 1}/${currentSong.size}`)
+//    res.set('Content-Ranges', 'bytes')
+//    res.status(206)
+
+//    stream.pipe(res)
+// }) 
+
+
+
+// router.post("/createPost", isLoggedIn, async (req, res, next) =>{
+
+//   var currentuser = await usermodel.findOne({username : req.session.passport.user})
+
+//   var newPost = new postmodel({
+//     media: req.body.media,
+//     caption: req.body.caption,
+//     user: req.user._id
+//   })
+
+//   await newPost.save()
+//   currentuser.post.push(newPost._id)
+//   await currentuser.save()
+
+
+
+//   res.redirect("/profile");
+// })
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null,'./public/uploads')
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname)
+    cb(null, uniqueSuffix)
+  }
+})
+
+
+
+
+const upload = multer({ 
+  storage ,
+  limits:{fileSize : 1000000000000000},
+})
+
+
+router.post("/createPost", upload.single('media'), async (req, res, next) =>{
+
   var currentuser = await usermodel.findOne({username : req.session.passport.user})
+ 
 
   var newPost = new postmodel({
-    media: req.body.media,
+    media: req.file.filename,
     caption: req.body.caption,
-    mediaType: 'image',
-    user: req.user._id
+    user: req.user._id,
+    mediaType : req.file.mimetype
   })
 
   await newPost.save()
@@ -200,61 +356,8 @@ router.post("/createPost", isLoggedIn, async (req, res, next) =>{
 
 
 
-  res.redirect("/feed");
+  res.redirect("/profile");
 })
-
-
-
-
-
-
-
-// const conn = mongoose.connection;
-
-// var gfsBucket
-// conn.once('open', () => {
-//   gfsBucket = new mongoose.mongo.GridFSBucket(conn.db, {
-//     bucketName: 'video'
-//   })
-
-// })
-
-
-
-
-// const storage = multer.memoryStorage()
-// const upload = multer({ storage: storage })
-
-// router.post('/createPost',isLoggedIn,upload.array('media') ,async (req,res,next)=>{
-//   await Promise.all(req.files.map(async file=>{
-//     const randomName =  crypto.randomBytes(20).toString('hex');  
-//     const data = id3.read(file.buffer);
-//     Readable.from(file.buffer).pipe(gfsBucket.openUploadStream(randomName))
-   
- 
-
-//       var newPost = new postmodel({
-//             media: req.body.media,
-//             caption: req.body.caption,
-//             mediaType: 'image',
-//             user: req.user._id,
-//             fileName: randomName,
-
-//           })
-//     //  title:songdata.title,
-//     //  artist:songdata.artist,
-//     //  album:songdata.album,
-//     //  size: file.size,
-//     //  poster: randomName + 'poster',
-   
-//  res.send('uploaded'); 
-// })
-//   )})
-
-
-
-
-
 
 
 
@@ -288,12 +391,12 @@ router.post('/forgot',async function(req, res, next) {
  }
  else{
   //key bana rahe h 
-  crypto.randomBytes(300,async function(err,buff){
-    let key = buff.toString("hex");
+  crypto.randomBytes(30,async function(err,buff){
+    let key =  buff.toString("hex");
     user.key = key;
     await user.save();
-    mailer(req.body.email, user._id,key)
-    await res.redirect("back")
+    await mailer(req.body.email, user._id,key)
+    res.redirect("back")
   })
 
  }
@@ -351,34 +454,44 @@ router.get("/savepost/:saveId", isLoggedIn,async function(req, res, next){
 
 
 
-
-
-
-
-
-
-router.post("/post",isLoggedIn, function(req,res,next){
- usermodel.findOne({username:req.session.passport.user})
- .then(function(foundUser){
-  postmodel.create({
-    userid: foundUser._id,
-    data: req.body.post,    
+router.post('/updateprofile', upload.single('dp'),isLoggedIn ,async function(req,res,next) {
+  var currentUser =  await usermodel.findOneAndUpdate({_id: req.user},{
+    image:req.file.filename,
+    bio:req.body.bio,
+    name:req.body.name,
   })
-  .then(function(createdpost){
-    foundUser.post.push(createdpost._id);
-    foundUser.save()
-    .then(function(){
-      res.redirect("back");
-    })
-  })
- })
+  res.redirect('/profile')
+  
+ });
+ 
+
+
+
+
+
+ router.get('/profile/:userid', async function(req, res, next) {
+
+ if (req.isAuthenticated()) {
+    var currentUser =  (req.user)
+  } else {   
+    res.render('notfound')
+  }
+  var post = await postmodel.find()
+  var User = await usermodel.findOne({_id : req.params.userid}).populate('post')
+  res.render('userprofile',{currentUser,User,post});
 });
 
+
+
+
+
+
+
+
 router.get('/profile', isLoggedIn ,async function(req,res,next) {
- var user =  await usermodel.findOne({username:req.session.passport.user})
- await user.populate("post")
- await user.populate('savedPosts')
-    res.render('profile', {user});
+  var currentUser =  await usermodel.findOne({username:req.session.passport.user}).populate('post')
+  var post = await postmodel.find().sort({ createdAt: 1 }).populate('user').populate('comments').populate({path: 'comments', populate:('user')});
+  res.render('profile', {currentUser,post});
 });
 
 
@@ -421,6 +534,7 @@ router.post('/login', passport.authenticate("local", {
 
 
 router.get('/login',function(req,res,next) {
+  
   res.render('login');
 });
 
@@ -443,7 +557,8 @@ function isLoggedIn(req,res,next){
 
 
 } catch (error) {
-  console.log(error)
+  render('notfound');
+  console.log(error);
 }
 
 

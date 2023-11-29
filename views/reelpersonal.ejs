@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Swiper demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <!-- Link Swiper's CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- Demo styles -->
+  <style>
+     *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    html,
+    body {
+      position: relative;
+      height: 100%;
+    }
+
+    body {
+      background: #eee;
+      font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+      /* left: 50%; */
+    }
+
+    .swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  
+   #line1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 35px;
+    font-size: 27px;
+    /* margin-left: 15px; */
+    /* margin-top: 120px; */
+    position: relative;
+    top: 18%;
+    left: 1%;
+    /* background-color: cadetblue; */
+    padding: 10px;
+   }
+   #line1 h6:nth-child(2){
+    margin-top: -29px;
+    /* background-color: coral; */
+   }
+   #playedreel{
+    height: 90vh;
+    border-radius: 15px;
+    object-fit: cover;
+    /* backdrop-filter: dropshadow(10px 10px #000); */
+    box-shadow: 0px 0px 25px 2px black;
+  
+   }
+   a{
+    text-decoration: none;
+    color: currentColor;
+   }
+   #dets{
+    /* background-color: cadetblue; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    /* display: none; */
+    position: absolute;
+    top: 8%;
+    /* left: 30%; */
+    margin-left: -70px;
+    filter: drop-shadow(0px 0px 25px 2px black);
+   }
+   #dets h2{
+    font-weight: 500;
+    color: #ffffff;
+    font-size: 1.5vw;
+  }
+  #mini{
+    height:3vw;
+    width: 3vw;
+    background-position: center;
+    object-fit: fill;
+    object-position: center;
+    border-radius: 50%;
+  }
+    
+  </style>
+</head>
+
+<body>
+  <%- include('partials/sidebar.ejs') %>
+
+  <!-- Swiper -->
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+
+
+        <div class="swiper-slide"> <video id="playedreel" autoplay controls muted  src="/uploads/<%= personalreel.media %>"></video>
+            <div id="line1">
+                <a href="/like/<%=personalreel._id%>">           
+                  <% if(personalreel.likes.includes(currentUser._id)){ %>
+                <i
+                  id="story-like-btn"
+                  style="color: red"
+                  class="ri-heart-3-fill"
+                ></i>
+                <% } else { %>
+                <i
+                  id="story-like-btn"
+                
+                  class="ri-heart-3-line"
+                ></i>
+                <% } %>
+                </a>
+                <h6><%=personalreel.likes.length%> </h6>
+                
+                <i id="comment-icon" class="ri-chat-3-line"></i>
+                <a href=""> <i class="ri-share-forward-line"></i></a>
+                <a href="/savepost/<%= personalreel._id %>"> 
+                  <% if(currentUser.savedPosts.includes(personalreel._id)){ %>
+                    <i
+                      id="story-like-btn"
+                      style="color: #000"
+                      class="ri-bookmark-fill"
+                    ></i>
+                    <% } else { %>
+                    <i
+                      id="story-like-btn"
+                    
+                    class="ri-bookmark-line"
+                    ></i>
+                    <% } %></a>
+              </div>
+              <div id="dets">
+                <img id="mini" src="/uploads/<%= personalreel.user.image %>" alt="">
+                <h2><%= personalreel.user.username %></h2>
+              </div> </div>
+
+     
+      <%  posts.forEach(post=>{ %>
+        <% if(post.mediaType == 'image/jpeg' || post.mediaType == 'image/jpg' || post.mediaType == 'image/png'){ %>
+          <img id="feed-img" style="display: none;" src="/uploads/<%= post.media %>" alt="haha">   
+  
+       <% } else{ %>
+       
+        <div class="swiper-slide"> 
+          <video id="playedreel" autoplay controls muted loop  src="/uploads/<%= post.media %>"></video>
+          <div id="line1">
+            <a href="/like/<%=post._id%>">           
+              <% if(post.likes.includes(currentUser._id)){ %>
+            <i
+              id="story-like-btn"
+              style="color: red"
+              class="ri-heart-3-fill"
+            ></i>
+            <% } else { %>
+            <i
+              id="story-like-btn"
+            
+              class="ri-heart-3-line"
+            ></i>
+            <% } %>
+            </a>
+            <h6><%=post.likes.length%> </h6>
+            
+            <i id="comment-icon" class="ri-chat-3-line"></i>
+            <a href=""> <i class="ri-share-forward-line"></i></a>
+            <a href="/savepost/<%= post._id %>"> 
+              <% if(currentUser.savedPosts.includes(post._id)){ %>
+                <i
+                  id="story-like-btn"
+                  style="color: #000"
+                  class="ri-bookmark-fill"
+                ></i>
+                <% } else { %>
+                <i
+                  id="story-like-btn"
+                
+                class="ri-bookmark-line"
+                ></i>
+                <% } %></a>
+          </div>
+          <div id="dets">
+            <img id="mini" src="/uploads/<%= post.user.image %>" alt="">
+            <h2><%= post.user.username %></h2>
+          </div>
+        </div>
+  
+     <%  } %>
+  
+    <%  })  %>
+    </div>
+    <!-- <div class="swiper-pagination"></div> -->
+  </div>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- Initialize Swiper -->
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+      direction: "vertical",
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+    });
+  </script>
+</body>
+
+</html>

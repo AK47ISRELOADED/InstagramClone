@@ -1,0 +1,45 @@
+  <div class="big-story">
+
+
+        <% allStories.forEach(function(story){ %>
+        <div class="story-big">
+          <i id="next-story" class="ri-arrow-right-s-fill"></i>
+          <i id="p-story" class="ri-arrow-left-s-fill"></i>
+
+          <div class="story-detail">
+            <div class="story-detail-1">
+              <a href="/feed"><i class="ri-arrow-left-line"></i></a>
+
+              <img src="/uploads/<%= story.user.image %>" alt="" />
+              <h3><%= story.user.username %></h3>
+            </div>
+            <div class="story-detail-2">
+              <i id="open-delete-story" class="ri-more-2-line"></i>
+              <div class="delete-story">
+                <a href="/deleteStory/<%= story._id %>">Delete Story</a>
+              </div>
+            </div>
+          </div>
+          <img id="story-photo" src="<%= story.media %>" alt="" />
+          <div class="story-review">
+            <input type="text" placeholder="Send Message" />
+            <% if(story.likes.includes(currentUser._id)){ %>
+            <i
+              id="story-like-btn"
+              style="color: red"
+              onclick="like('<%= story._id %>')"
+              class="ri-heart-3-fill"
+            ></i>
+            <% } else { %>
+            <i
+              id="story-like-btn"
+              onclick="like('<%= story._id %>')"
+              class="ri-heart-3-line"
+            ></i>
+            <% } %>
+            
+            <i class="ri-send-plane-fill"></i>
+          </div>
+        </div>
+        <% }) %>
+      </div>

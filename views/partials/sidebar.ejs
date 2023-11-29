@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <style>
+        
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html,body{
+    height: 100%;
+    width: 100%;
+}
+#side-bar{
+    height: 100vh;
+    width: 70px;
+    /* background-color: cornflowerblue; */
+    position: fixed;
+    background-color: #fff;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #4d4d4d64;
+    align-items: center;
+    padding: 20px 0;
+}
+
+#side-bar a i{
+    text-decoration: none;
+    font-size: 28px;
+    color: #000;
+    transition: all ease 0.2s;
+    cursor: pointer;
+    transition: all ease 0.3s;
+
+}
+
+#side-bar i{
+    text-decoration: none;
+    font-size: 28px;
+    color: #000;
+    transition: all ease 0.2s;
+    cursor: pointer;
+    transition: all ease 0.3s;
+
+}
+#side-bar a {
+    position: relative;
+    text-decoration: none;
+    font-size: 28px;
+    color: #000;
+    transition: all ease 0.2s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all ease 0.3s;
+
+}
+#side-bar a h5{
+    position: absolute;
+    left: 160%;
+    margin-top: 8px;
+    font-weight: 200;
+    background-color: #dedede;
+    padding: 2px 9px;
+    font-size: 16px;
+    display: none;
+    clip-path: polygon(100% 0%, 100% 51%, 100% 100%, 12% 100%, 0% 50%, 12% 0);
+    
+    transition: all ease 0.3s;
+}
+#side-bar i h5{
+    position: absolute;
+    left: 160%;
+    /* margin-top: 8px; */
+    margin-top: -20px;
+    /* color: #1877F2; */
+    font-weight: 200;
+    /* scale: 5; */
+    background-color: #dedede;
+    padding: 2px 9px;
+    font-size: 16px;
+    display: none;
+    clip-path: polygon(100% 0%, 100% 51%, 100% 100%, 12% 100%, 0% 50%, 12% 0);
+    
+    transition: all ease 0.3s;
+}
+
+#menu-bar{
+  scale: 0;
+  position: absolute;
+  top: 88%;
+  /* background-color: cadetblue; */
+}
+#menu-bar a{
+  font-size: 17px;
+  color: red;
+  text-decoration: none;
+}
+
+#side-bar a:hover{
+    scale: 1.1;
+}
+#side-bar a:hover h5{
+    display: block;
+}
+
+#side-bar i:hover{
+    scale: 1.1;
+    
+}
+
+
+#side-bar i:hover h5{
+    display: block;
+}
+
+#side-bar a:nth-child(3){
+    margin-top: -90px;
+}
+
+#side-bar i:nth-child(){
+    margin-top: -90px;
+}
+
+#side-bar i:nth-child(4){
+    margin-top: -90px;
+}
+#side-bar a:nth-child(4){
+    margin-top: -90px;
+}
+#side-bar a:nth-child(5){
+    margin-top: -90px;
+}
+
+#side-bar a img{
+    height: 40px;
+    width: 40px;
+    margin-top: -90px;
+    object-fit: cover;
+    border: 2px solid #000;
+    border-radius: 50%;
+}
+
+@media (max-width:550px) {
+   
+    #side-bar{
+        height: 25px;
+    width: 100vw;
+    position: fixed;
+    bottom: 0%;
+    top: 93vh;
+    left: 0;
+    /* top: 90vh; */
+   /* background-color: cornflowerblue; */
+   display: flex;
+   align-items: center;
+   justify-content: space-around;
+   flex-direction: row;
+   overflow: hidden;
+   z-index: 9999999999999999999999;
+    }
+
+
+
+    
+#side-bar a i{
+    text-decoration: none;
+    font-size: 28px;
+    color: #000;
+    transition: all ease 0.2s;
+    cursor: pointer;
+    transition: all ease 0.3s;
+
+}
+
+#side-bar i{
+    text-decoration: none;
+    font-size: 28px;
+    color: #000;
+    transition: all ease 0.2s;
+    cursor: pointer;
+    transition: all ease 0.3s;
+
+}
+#side-bar a {
+    /* position: relative; */
+    text-decoration: none;
+    font-size: 28px;
+    color: #000;
+    transition: all ease 0.2s;
+    cursor: pointer;
+    /* display: flex; */
+    align-items: center;
+    transition: all ease 0.3s;
+
+}
+#side-bar a h5{
+    /* position: absolute; */
+    left: 160%;
+    display: none;
+    margin-top: 8px;
+    font-weight: 200;
+    background-color: #dedede;
+    display: none;
+    padding: 2px 9px;
+    font-size: 16px;
+    display: none;
+    clip-path: polygon(100% 0%, 100% 51%, 100% 100%, 12% 100%, 0% 50%, 12% 0);
+    
+    transition: all ease 0.3s;
+}
+#side-bar i h5{
+    /* position: absolute; */
+    display: none;
+    left: 160%;
+    /* margin-top: 8px; */
+    margin-top: -20px;
+    /* color: #1877F2; */
+    font-weight: 200;
+    /* scale: 5; */
+    background-color: #dedede;
+    padding: 2px 9px;
+    font-size: 16px;
+    display: none;
+    clip-path: polygon(100% 0%, 100% 51%, 100% 100%, 12% 100%, 0% 50%, 12% 0);
+    
+    transition: all ease 0.3s;
+}
+
+#menu-bar{
+  scale: 0;
+  /* position: absolute;     */
+  top: 88%;
+  /* background-color: cadetblue; */
+  display: none;
+}
+#menu-bar a{
+  font-size: 17px;
+  color: red;
+  text-decoration: none;
+  
+}
+
+.ri-menu-5-line{
+    display: none;
+}
+#side-bar a:nth-child(3){
+    margin-top: 0px;
+    /* background-color: blue; */
+}
+#side-bar a:nth-child(1){
+    margin-top: 0px;
+    background-color: blue;
+    display: none;
+}
+
+#side-bar i:nth-child(){
+    margin-top: 0px;
+}
+
+#side-bar i:nth-child(4){
+    margin-top: 0px;
+}
+#side-bar a:nth-child(4){
+    margin-top: 0px;
+}
+#side-bar a:nth-child(5){
+    margin-top: 0px;
+    /* background-color: coral; */
+}
+
+
+#side-bar a img{
+    height: 30px;
+    width: 30px;
+    margin-top: 1px;
+    object-fit: cover;
+    border: 2px solid #000;
+    border-radius: 50%;
+}
+  }
+
+
+    </style>
+</head>
+<body>
+    <div id="side-bar">
+       
+
+
+        <a href=""><i class="ri-instagram-line"></i> <h5>instagram</h5> </a>
+        
+        
+        <a href="/feed"><i class="ri-home-heart-line"></i> <h5>home</h5></a>
+        
+        <a href="/search"> <i  class="ri-search-2-line"><h5>search</h5></i> </a>
+    
+        <a href="/reel"><i class="ri-movie-line"></i>  <h5>reels</h5>  </a>
+        <a href="/createPost"><i class="ri-add-box-line"></i> <h5>create</h5></a>
+        <a href="/profile"><img src="/uploads/<%= currentUser.image %>" alt=""> </a>
+      
+    
+    
+        <i class="ri-menu-5-line"><h5>menu</h5></i> 
+        <div id="menu-bar">
+          <a href="/logout">logout</a>
+        </div>
+      </div>
+    
+
+
+
+      <script>
+    
+          
+      var opened = 1
+
+document.querySelector(".ri-menu-5-line").addEventListener('click',(eve)=>{
+
+  if (opened) {
+    document.querySelector('#menu-bar').style.scale = '1';
+    opened = 0;
+  }
+  else{
+    document.querySelector('#menu-bar').style.scale = '0';
+    opened = 1;
+  }
+ 
+})
+
+
+
+      </script>
+</body>
+</html>

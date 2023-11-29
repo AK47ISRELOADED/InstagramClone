@@ -8,18 +8,11 @@
 </head>
 
 <style>
-/*
-* Prefixed by https://autoprefixer.github.io
-* PostCSS: v8.4.14,
-* Autoprefixer: v10.4.7
-* Browsers: last 4 version
-*/
 
 * {
         margin: 0;
         padding: 0;
-        -webkit-box-sizing: border-box;
-                box-sizing: border-box;
+        box-sizing: border-box;
     }
 
     html,
@@ -83,6 +76,92 @@
         color: #000;
         text-decoration: none;
     }
+    @media (max-width:500px) {
+
+        html,
+    body {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: gilroy;
+        background-image: url(/images/instagram-background.jpg);
+        /* object-fit: cover; */
+        /* background-position: center; */
+        background-size: cover;
+    }
+
+    #main {
+        position: relative;
+        width: 90%;
+        height: 70%;
+        background-color:#fff;
+        border-radius: 20px;
+        border: 2px solid #000;   
+        padding: 10px 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #main h1{
+        text-align: center;
+        font-size: 20px;
+        text-transform: capitalize;
+        margin-bottom: 10px;
+    }
+    form{
+        padding: 20px;
+        gap: 10px;
+        display: flex;
+        flex-direction: column;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    input{
+        padding: 11px 20px;
+        border-radius: 20px;
+        /* margin-top: 0px; */
+        outline: none;
+        background-color: #dedede;
+        border: none;
+    }
+    input:nth-child(1){
+        padding: 11px 20px;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    input::placeholder{
+        /* color: blueviolet; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    button{
+        border-radius: 20px;
+        width: 200px;
+        border: none;
+        outline: none;
+        margin-top: 20px;
+        text-align: center;
+        padding: 10px 20px;
+        background-color: #dedede;
+    }
+    a{
+        position: absolute;
+        top: 3%;
+        font-size: 25px;
+        color: #000;
+        text-decoration: none;
+    }
+
+
+     }
+
 </style>
 
 <body>
@@ -90,12 +169,12 @@
         <div class="create-post">
             <h1>create new post</h1>
             <hr>
-            <form action="/createPost" method="post" >
-                <input type="text" name="media" placeholder="add post">
+            <form action="/createPost" method="post"  enctype="multipart/form-data">
+                <input type="file" name="media" placeholder="add post">
                 <input type="text" name="caption" placeholder="enter your caption">
-                <button>submit</button>
+                <button type="submit">submit</button> 
             </form>
-            <a href="/feed"><i class="ri-arrow-left-line"></i></a>
+            <a href="/profile"><i class="ri-arrow-left-line"></i></a>
         </div>
     </div>
 </body>

@@ -1,3 +1,4 @@
+const { file } = require("googleapis/build/src/apis/file");
 var mongoose=  require("mongoose");
 
 
@@ -19,7 +20,7 @@ user:{
 },
 mediaType : {
     type: String,
-    enum: ['image', 'video'],
+    enum: ['image', 'video','video/mp4','image/jpeg','image/png','image/jpg'],
     require: true
 },
 likes:[

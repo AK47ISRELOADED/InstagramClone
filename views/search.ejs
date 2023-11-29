@@ -3,30 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>search</title>
     <link rel="stylesheet" href="/stylesheets/search.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
 </head>
 <body>
-    <div id="side-bar">
 
 
-        <a href=""><i class="ri-instagram-line"></i> <h5>instagram</h5> </a>
-        
-        
-        <a href="/feed"><i class="ri-home-heart-line"></i> <h5>home</h5></a>
-        
-        <a href="/search"> <i  class="ri-search-2-line"><h5>search</h5></i> </a>
-    
-        <a href=""><i class="ri-movie-line"></i>  <h5>reels</h5>  </a>
-        <a href="/createPost"><i class="ri-add-box-line"></i> <h5>create</h5></a>
-        <a href="/profile"><img src="<%= currentUser.image %>" alt=""> </a>
-      
-    
-    
-        <a href=""><i class="ri-menu-5-line"></i> <h5>menu</h5></a>
-      </div>
+  <%- include('partials/sidebar.ejs') %>
 
 
     <div id="main">
@@ -93,7 +78,7 @@
                   <% allUsers.forEach(function(user){ %>
                     <% if(currentUser.username == user.username){ %>
                       <div style="display: none;" class="user-card">
-                        <img src="<%= user.image %>" alt="" />
+                        <img src="/uploads/<%= user.image %>" alt="" />
                         <h3><%= user.fullName %></h3>
                         <% if(currentUser.following.includes(user._id)){ %>
                           <a href="/follow/<%= user._id %>"><h2>following</h2></a>
@@ -104,10 +89,10 @@
                       </div>
                     <% } else{ %>
                       <div class="user-card">
-                        <img src="<%= user.image %>" alt="" />
+                        <img src="/uploads/<%= user.image %>" alt="" />
                         <h3><%= user.username %></h3>
                         <% if(currentUser.following.includes(user._id)){ %>
-                          <a style="background-color: #18f261;" href="/follow/<%= user._id %>"><h2>following</h2></a>
+                          <a style="background-color: #17b406;" href="/follow/<%= user._id %>"><h2>following</h2></a>
                         <% } else{ %>
                         <a href="/follow/<%= user._id %>"><h2>Follow</h2></a>
                         <% } %>
@@ -120,7 +105,14 @@
               <div id="posts">
                 <% allposts.forEach(function(post){ %>
                 <div class="post">
-                  <img src="<%= post.media %>" alt="" />
+                  <% if(post.mediaType == 'image/jpeg' || post.mediaType == 'image/jpg' || post.mediaType == 'image/png'){ %>
+                    <img id="feed-img" src="/uploads/<%= post.media %>" alt="haha">   
+            
+                 <% } else{ %>
+                 <a href="/reel/<%= post._id %>"> <video id="feed-video" autoplay  muted loop  src="/uploads/<%= post.media %>"></video></a>
+        
+               <%  } %>
+                 
                 </div>
                 <% }) %>
               </div>
@@ -160,6 +152,8 @@
 
     document.querySelectorAll(".suggestion").forEach(function (style) {
       style.addEventListener("click", function (event) {
+        // document.querySelector('#feed').style.display = 'none'
+        // closefy()
         closeUsers()
         closeTrending()
         closehashtags()
@@ -171,11 +165,15 @@
       });
     });
 
+
+
+  
+
     function openUsers() {
       var tl = gsap.timeline();
       tl.to(".users", {
         height: "200px",
-        delay: 3,
+        delay: 1,
         duration: 0.1,
       });
       tl.to(".all-users",{
@@ -201,7 +199,6 @@
       })
       tl.to(".users", {
         height: "0px",
-        delay: 1,
         duration: 0.00001,
       });
     }
@@ -210,12 +207,12 @@
       var tl = gsap.timeline();
       tl.to(".users", {
         height: "70px",
-        delay: 3,
-        duration: 0.4,
+        delay: 1,
+        duration: 0.1,
       });
       tl.to(".trending",{
         left: "0",
-        duration: .1
+        duration: .0001
       })
       tl.to(".trending h1", {
         stagger: 0.1,
@@ -236,8 +233,8 @@
       })
       tl.to(".users", {
         height: "0px",
-        delay: 1,
-        duration: 0.4,
+     
+        duration: 0.1,
       });
     }
     
@@ -245,7 +242,7 @@
       var tl = gsap.timeline();
       tl.to(".users", {
         height: "70px",
-        delay: 3,
+        delay: 1,
         duration: 0.4,
       });
       tl.to(".popular-hashtags",{
@@ -271,8 +268,8 @@
       })
       tl.to(".users", {
         height: "0px",
-        delay: 1,
-        duration: 0.4,
+       
+        duration: 0.1,
       });
     }
     
@@ -280,7 +277,7 @@
       var tl = gsap.timeline();
       tl.to(".users", {
         height: "70px",
-        delay: 3,
+        delay: 1,
         duration: 0.4,
       });
       tl.to(".places",{
@@ -306,8 +303,8 @@
       })
       tl.to(".users", {
         height: "0px",
-        delay: 1,
-        duration: 0.4,
+  
+        duration: 0.1,
       });
     }
 
@@ -320,12 +317,12 @@
       response.data.searchedUser.forEach(function(user){
         console.log(user)
         clutter += `<div class="user-card2">
-                    <img style="width: 60px; height: 60px;" src="${user.image}" alt="" />
+                    <img src="/uploads/${user.image}" alt="" />
                     <h3>${user.username}</h3>
                     <% if(currentUser.following.includes("${user._id}")){ %>
-                      <a style="background-color: #18f261;" href="/follow/${user._id}"><h4>following</h4></a>
+                      <a id="followng" style="background-color: #18f261;" href="/follow/${user._id}"><h4>following</h4></a>
                     <% } else{ %>
-                    <a href="/follow/${user._id}"><h4>Follow</h4></a>
+                    <a id="follow" href="/follow/${user._id}"><h4>Follow</h4></a>
                     <% } %>
                   </div>`
       })
@@ -336,6 +333,12 @@
     function closeSearchDiv(){
         document.querySelector("#user-area").style.display = "none"
     }
+
+
+
+
+
+
   </script>
 </body>
 </html>
