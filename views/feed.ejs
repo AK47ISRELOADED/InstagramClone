@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>feed</title>
   <link rel="stylesheet" href="/stylesheets/feed.css">
-  <!-- <link rel="shortcut icon" href="/images/icons8-instagram-32.png" sizes="64x64"  type="image/x-icon"> -->
-  <link rel="icon" type="image/png" sizes="64x64" href="https://icons8.com/icon/Xy10Jcu1L2Su/instagram">
-
+  <link rel="shortcut icon" href="/images/icons8-instagram-32 (1).png" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css">
 
@@ -19,14 +17,7 @@
 
 
   <div id="main">
-    <div class="theme-toggle">
-      <label for="theme-switch">Dark Mode</label>
-      <input type="checkbox" id="theme-switch">
-  </div>
-    <div id="up-arrow">
-      <a href=""><i class="ri-arrow-up-circle-line"></i></a>
-    </div>
-
+ 
     <div id="logoo">
       <img src="/images/pngwing.com.png" alt="">
     </div>
@@ -46,15 +37,26 @@
       </div>
       <div id="stories">
         <div class="add-story">
-          <img src="/uploads/<%= currentUser.image %>"  alt="" />
+        <a href="/userstory">  <img src="/uploads/<%= currentUser.image %>"  alt="" /></a>
           <i id="open-add-story" class="ri-add-fill"></i>
         </div>
         <div class="user-stories">
-          <% allStories.forEach(function(story){ %>
-            <div class="story">
-              <img id="story-img1" class="storyimg-<%= story.user.username %>" src="/uploads/<%= story.user.image %>" alt="" />
-            </div>
-          <% }) %>
+         
+       
+            <% allStories.forEach(story=>{ %>
+
+              <% if( story.user.username == currentUser.username ){ %>
+                <div style='display: none;' class="story">
+                  <img style="display: none;" id="story-img1" class="storyimg-<%= story.user.username %>" src="/uploads/<%= story.user.image %>" alt="" />
+                </div>
+             <% } else{ %>
+              <div  class="story">
+               <a href="/veiwstory"> <img id="story-img1" class="storyimg-<%= story.user.username %>" src="/uploads/<%= story.user.image %>" alt="" /></a>
+              </div>
+           <%  } %>
+
+              <%  }) %>
+      
         </div>
       </div>
     
@@ -67,7 +69,7 @@
 
       <% allposts.reverse().forEach(post=>{ %>
 
-        <% if(post.user.follower.includes(currentUser._id)){ %>
+        <% if(post.user.follower.includes(currentUser._id)) { %>
           <div id="feed-card">
             <div id="nav">
              <a href="/profile/<%= post.user._id %>"> <img id="mini" src="/uploads/<%= post.user.image %>" alt=""></a>
@@ -142,17 +144,26 @@
                       <h4><%= comment.user.username %></h4>
                       <h3><%= comment.text %></h3>
                       <small> <%= comment.createdAt.toLocaleString() %> </small>
+                      <div class="comment-review">
+                        <a href=""><i class="ri-reply-line"></i></a>
+                        <a href="/likeComment/<%= comment._id %>"> <% if(comment.likes.includes(currentUser._id)){ %>
+                          <i
+                            id="story-like-btn"
+                            style="color: red"
+                            class="ri-heart-3-fill"
+                          ></i>
+                          <% } else { %>
+                          <i
+                            id="story-like-btn"
+                          
+                            class="ri-heart-3-line"
+                          ></i>
+                          <% } %></a>
+                        <a href="/delete/<%= comment._id %>"><i class="ri-delete-bin-2-line"></i></a>
+                        
+                      </div>
                     </div>
-                    <div class="comment-review">
-                      <a href=""><i class="ri-reply-line"></i></a>
-                      <a href="/likeComment/<%= comment._id %>"
-                        ><i class="ri-heart-line"></i
-                      ></a>
-                      <a href="/delete/<%= comment._id %>"
-                        ><i class="ri-delete-bin-7-fill"></i
-                      ></a>
-                      
-                    </div>
+                   
                   </div>
                   <% }) %>
                   <form action="/addComment/<%= post._id %>" method="post">
@@ -163,10 +174,10 @@
                       placeholder="write comment to <%= post.user.username %>"
                     />
                   </form>
-                </div>
+                </div> 
               </div>
               <div id="lastt">
-                <h6 id="time-posted"><%= post.createdAt %></h6>
+                <h6 id="time-posted"><%= post.createdAt.toLocaleString() %></h6>
 
               </div>
             </div> 
@@ -189,40 +200,26 @@
   <script  src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"integrity="sha512-emSwuKiMyYedRwflbZB2ghzX8Cw8fmNVgZ6yQNNXXagFzFOaQmbvQ1vmDkddHjm5AITcBIZfC7k4ShQSjgPAmQ=="  crossorigin="anonymous"  referrerpolicy="no-referrer"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const themeSwitch = document.getElementById('theme-switch');
-    
-    themeSwitch.addEventListener('change', function () {
-        document.body.classList.toggle('dark-theme', themeSwitch.checked).then(eve=>{
-          document.querySelector('.theme-toggle>label').style.display = 'none '
-        })
-        document.body.classList.toggle('light-theme', !themeSwitch.checked);
-    });
-});
-
 let progressBar = document.querySelector("#rainbow-progress-bar");
 window.onload = function() {
   progressBar.style.display = 'none';
 };
 
-  // CODE TO OPEN COMMENT INPUT FIELD
+ // CODE TO OPEN COMMENT INPUT FIELD
+ var vv = 1;
+ document.querySelectorAll('#comment-icon').forEach(element => {
+  element.addEventListener('click',function(){
+   
+    if (vv == 1) {
+      element.parentElement.parentElement.querySelector('#comment-input').style.display = 'block'
+      vv = 2
+    }else{
+      element.parentElement.parentElement.querySelector('#comment-input').style.display = 'none'
+      vv = 1
 
-  // var clicks = 1;
-  //   document.querySelectorAll('#comment-icon').addEventListener("click", function (event) {
-    
-  //     if (clicks == 1) {
-  //      document.querySelector( "#comment-input" ).style.display = "flex";
-  //      console.log("clicked")
-  //       clicks = 2;
-  //     }
-  //     else if(clicks == 2) {
-  //       document.querySelector( "#comment-input").style.display = "none";
-  //       document.querySelector( "#main").style.display = "none";
-        
-  //       clicks = 1;
-  //     }
-  //   });
-
+    }
+  })
+ });
 
   // CODE TO OPEN & CLOSE ADD STORY PAGE
 
@@ -240,10 +237,10 @@ document.querySelectorAll("#open-more-options").forEach(function (openInput) {
       
       openInput.addEventListener("click", function (event) {
          if (click == 1) {
-          parentElement.querySelector( ".more-option" ).style.scale = "1";
+         openInput.parentElement.querySelector( ".more-option" ).style.scale = "1";
           click = 2;
         } else if (click == 2) {
-          document.querySelector(
+     openInput.parentElement.querySelector(
             ".more-option"
           ).style.scale = "0";
           click = 1;
@@ -306,17 +303,17 @@ document.querySelectorAll("#open-more-options").forEach(function (openInput) {
 
     // ---------------------------------------------------------------------
 
-    function reset() {
-        document.querySelectorAll(".suggestion").forEach(function (change) {
-          change.style.backgroundColor = "rgb(157, 161, 157)";
-          change.style.color = "white";
-        });
-        document
-          .querySelectorAll(".suggestion i")
-          .forEach(function (changeIcon) {
-            changeIcon.style.transform = "rotateX(0deg)";
-          });
-      }
+    // function reset() {
+    //     document.querySelectorAll(".suggestion").forEach(function (change) {
+    //       change.style.backgroundColor = "rgb(157, 161, 157)";
+    //       change.style.color = "white";
+    //     });
+    //     document
+    //       .querySelectorAll(".suggestion i")
+    //       .forEach(function (changeIcon) {
+    //         changeIcon.style.transform = "rotateX(0deg)";
+    //       });
+    //   }
 
 
     // document.querySelectorAll(".storyimg-adarshkaurav.47").forEach(story=>{

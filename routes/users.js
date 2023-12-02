@@ -11,8 +11,14 @@ var userSchema = mongoose.Schema({
   },
   image: {
     type: String,
-    default: '/images/userdef.png',
+    default: '/userdef.png',
   },
+  story : [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'story'
+    }
+  ],
   name: {
     type: String,
     require: true

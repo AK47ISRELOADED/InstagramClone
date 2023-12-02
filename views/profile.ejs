@@ -63,7 +63,9 @@
           <h4><%= post.likes.length %><i class="ri-heart-line"></i>  <%= post.comments.length %><i class="ri-chat-3-line"></i>  </h4>     
     
          <% } else{ %>
-          <a href="/reel/<%= post._id %>"><video src="/uploads/<%= post.media %>"></video>
+          <a href="/reel/<%= post._id %>">
+            <img id="reel-icon" src="/images/instagram-reel.png" alt="">   
+            <video src="/uploads/<%= post.media %>"></video>
             <h4><%= post.likes.length %><i class="ri-heart-line"></i>  <%= post.comments.length %><i class="ri-chat-3-line"></i>  </h4>     
   </a>
        <%  } %>
@@ -75,7 +77,8 @@
      <div id="reels-gallery">
       <% currentUser.post.reverse().forEach(post=>{ %>
         <% if(post.mediaType == 'video/mp4'){ %>
-        <div class="reels-card">         
+        <div class="reels-card">   
+          <img src="/images/instagram-reel.png" alt="">      
           <a href="/reel/<%= post._id %>"><video autoplay muted loop  src="/uploads/<%= post.media %>"></video>
             <h4><%= post.likes.length %><i class="ri-heart-line"></i>  <%= post.comments.length %><i class="ri-chat-3-line"></i>  </h4>     
   </a>          </div>
@@ -91,10 +94,11 @@
 
 
      <div id="saved-gallery">
-      <% currentUser.savedPosts.forEach(post=>{ %>
+      <% currentUser2.post.forEach(post=>{ %>
         <div class="saved-card">
           <h1><%=post%></h1>
-         <img src="<%= post.media %>" alt="">
+         <img src="/uploads/<%= post.media %>" alt="4 ">
+         <video src="/uploads/<%= post.media %>" autoplay muted loop ></video>
         </div>
      
          <%  }) %>

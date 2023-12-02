@@ -191,7 +191,7 @@ a{
 #feed-card:nth-last-child(1){
   margin-bottom: 100px;
 
-  background-color: #1de840;
+  /* background-color: #1de840; */
 }
 #feed-card img{
     max-height: 100vh;
@@ -347,20 +347,18 @@ a{
 
 
 .comment {
-
-  display: -ms-flexbox;
+  position: relative;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
           flex-direction: column;
+          margin-bottom: 5px;
   /* margin-top: -10px; */
   /* background-color: chocolate; */
-
+/* background-color: cornflowerblue; */
 }
 
 .comment h4 {
-  color: rgba(9, 9, 9, 0.497)
+  color: rgba(9, 9, 9, 0.497);
+  /* background-color: crimson; */
 }
 
 .comment input {
@@ -370,13 +368,32 @@ a{
   padding: 5px 20px;
   display: none;
   border-radius: 10px;
-  background-color: #000;
+  /* background-color: #000; */
 }
 
+.comment-data{
+  /* background-color: chocolate; */
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 15px;
+  width: 100%;
+  position: relative;
+  margin-bottom: 2px;
+}
 
+.comment-data h4{
+  font-size: 15px;
+}
+.comment-data h3{
+  font-size: 18px;
+}
 
-
-
+.comment-data small{
+  font-size: 12px;
+  font-family: gilroy;
+  font-weight: 500;
+}
 
 #nonnn{
   display: none;
@@ -415,7 +432,7 @@ a{
      /* background-color: cornflowerblue; */
      display: flex;
      align-items: center;
-     justify-content: space-between;
+     /* justify-content: space-between; */
 
 
     gap: 10px;
@@ -460,9 +477,9 @@ a{
    
     display: flex;
   
-            align-items: center;
+     align-items: center;
     height: 150px;
-    width: 85% ;
+    width: fit-content ;
     /* background-color: aqua; */
     gap: 10px;
     position: relative;
@@ -681,8 +698,9 @@ a{
     top: 0;
     width: calc(100vw - 70px);
     height: 100vh;
-    background: -webkit-gradient(linear, left top, right top, from(red), to(rgb(123, 13, 123)));
- 
+    background-color: rgba(255, 255, 255, 0.295);
+  /* background-color: #1ddde8; */
+  backdrop-filter: blur(5px);
     overflow: hidden;
 
     transition: all linear 0.2s;
@@ -699,7 +717,6 @@ z-index: 9999999999;
   
   .upload-story form {
   
-    display: -ms-flexbox;
     display: flex;
   
             align-items: center;
@@ -714,18 +731,16 @@ z-index: 9999999999;
   button {
     padding: 10px 30px;
     text-align: center;
-    font-size: 30px;
+    font-size: 20px;
     text-transform: capitalize;
-    border: none;
+    border: 2px solid rgb(68, 115, 255);
     outline: none;
     border-radius: 10px;
   }
   
   .upload-story form button {
-    background-color: rgb(109, 139, 247);
-    background: -webkit-gradient(linear, left top, right top, from(rgb(47, 99, 123)), to(rgb(73, 121, 43)));
-    background: -o-linear-gradient(left, rgb(47, 99, 123), rgb(73, 121, 43));
-    background: linear-gradient(to right, rgb(47, 99, 123), rgb(73, 121, 43));
+    background-color: rgb(47, 91, 252);
+    
     color: white;
     border-radius: 30px;
     padding: 10px 40px;
@@ -733,7 +748,7 @@ z-index: 9999999999;
   
   .upload-story i {
     position: absolute;
-    color: white;
+    color: rgb(32, 51, 178);
     font-size: 50px;
     top: 1%;
     right: 3%;
@@ -1037,8 +1052,11 @@ display: none;
 /* position: relative; */
 position: absolute;
 margin-top: 20px;
+width: fit-content;
+
 /* top: 90%; */
-bottom: 5px;
+bottom: 50px;
+padding: 5px 27px;
 display: block;
 }
 
@@ -1065,7 +1083,7 @@ margin-bottom: 50px;
   /* background-color: cornflowerblue; */
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 
 
  gap: 10px;

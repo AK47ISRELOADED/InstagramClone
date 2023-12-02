@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Swiper demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <!-- Link Swiper's CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+
+  <!-- Demo styles -->
+  <style>
+    html,
+    body {
+      position: relative;
+      height: 100%;
+    }
+    :root {
+    --swiper-theme-color: linear-gradient(90deg,yellow , rgb(234, 34, 34), rgb(137, 11, 221));
+}
+
+    body {
+      background: #eee;
+      font-family: calibri;
+      font-size: 14px;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .swiper-slide h1{
+        position: absolute;
+        top: 4%;
+        left: 15%;
+        font-size: 18px;
+
+    }
+    .swiper-slide img {
+      display: block;
+      width: 40vw;
+      height: 40vw;
+      /* object-fit: cover; */
+    }
+    .swiper-slide  .mini{
+        position: absolute;
+        top: 2%;
+        left: 10%;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+    }
+    .swiper-button-prev{
+        margin-left: 100px;
+    }
+  </style>
+</head>
+
+<body>
+    <%- include('partials/sidebar.ejs') %>
+  <!-- Swiper -->
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+        <% allstories.forEach(story=>{ %>
+            <%  if(story.user.username == currentUser.username){ %>
+                <div class="swiper-slide">
+                    <img class="mini" src="/uploads/<%= story.user.image %>" alt="">
+                    <h1><%= story.user.username %></h1>
+                    <img src="<%= story.media %>" alt="">
+                </div>
+          <%  }  %>
+           
+     
+       <% }) %>
+    
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>
+  </div>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- Initialize Swiper -->
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+      pagination: {
+        el: ".swiper-pagination",
+        type: "progressbar",
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+    });
+  </script>
+</body>
+
+</html>

@@ -67,7 +67,8 @@ router.get('/feed',async function(req, res, next) {
   var allUsers = await usermodel.find();
   var allposts = await postmodel.find().sort({ createdAt: 1 }).populate('user').populate('comments').populate({path: 'comments', populate:('user')});
   var allStories = await storyModel.find().populate('user')
-  
+
+
 
 
   res.render('feed',{currentUser,allposts,allStories,allUsers});
@@ -182,6 +183,31 @@ router.get("/follow/:userId", isLoggedIn,async function(req, res, next){
 
 
 
+router.get("/userstory",async function(req, res, next){
+  if (req.isAuthenticated()) {
+    var currentUser =  (req.user)
+  } else {   
+    res.render('notfound')
+  }
+  
+  var allstories =  await storyModel.find().populate('user')
+
+  // console.log("story",story);
+  res.render("userstory",{currentUser,allstories})
+})
+
+
+router.get("/veiwstory",async function(req, res, next){
+  if (req.isAuthenticated()) {
+    var currentUser =  (req.user)
+  } else {   
+    res.render('notfound')
+  }
+  
+  var allstories =  await storyModel.find().populate('user')
+  res.render("viewstory",{currentUser,allstories})
+})
+
 
 
 
@@ -191,8 +217,18 @@ router.post("/createStory",isLoggedIn ,async function(req, res, next){
     caption: req.body.caption,
     user: req.user._id
   })
-
+  if (req.isAuthenticated()) {
+    var currentUser =  (req.user)
+  } else {   
+    res.render('notfound')
+  }
+ 
   await newStory.save();
+  await currentUser.story.push(newStory._id);
+  await currentUser.save()
+
+
+
 
   res.redirect("back")
 })
@@ -249,7 +285,12 @@ router.get("/warning", isLoggedIn, function(req, res, next){
 
 
 router.get("/createPost", function(req, res, next){
-  res.render("createPost")
+  if (req.isAuthenticated()) {
+    var currentUser =  (req.user)
+  } else {   
+    res.render('notfound')
+  }
+  res.render("createPost",{currentUser})
 })
 
 
@@ -360,6 +401,86 @@ router.post("/createPost", upload.single('media'), async (req, res, next) =>{
 })
 
 
+
+
+
+router.post("/addComment/:postId",isLoggedIn ,async function(req, res, next){
+  var currentPost = await postmodel.findOne({
+    _id:req.params.postId
+  })
+
+  var loggedInUser = await usermodel.findOne({
+    username: req.session.passport.user
+  })
+
+  var newComment = await commentmodel.create({
+    text : req.body.comment,
+    user: loggedInUser._id,
+    post: currentPost._id
+  })
+
+  currentPost.comments.push(newComment._id);
+
+  await currentPost.save();
+
+  res.redirect("back");
+})
+
+
+router.get("/delete/:commentId",async function(req, res, next){
+
+  var loggedInUser = await usermodel.findOne({
+    username: req.session.passport.user
+  })
+
+
+  var currentComment = await commentmodel.findOne({
+    _id: req.params.commentId
+  }).populate('user');
+
+  var currentPost = await postmodel.findOne({
+    _id: currentComment.post
+  }).populate('user')
+
+  if(currentComment.user.username == loggedInUser.username || currentPost.user.username == loggedInUser.username){
+    await commentmodel.findOneAndDelete({
+      _id: currentComment._id
+    })
+  }
+  else{
+    res.json({
+      data: "you cant delete this comment as this is not your post"
+    })
+    return
+  }
+
+  await currentPost.comments.pull(currentComment._id);
+
+  currentPost.save();
+
+  res.redirect("back");
+})
+
+
+
+router.get('/likeComment/:commentid',isLoggedIn, function(req, res, next) {
+  usermodel.findOne({username:req.session.passport.user})
+  .then(function(foundUser){
+    commentmodel.findOne({_id:req.params.commentid})
+    .then(function(comment){
+      if(comment.likes.indexOf(foundUser._id)=== -1){
+        comment.likes.push(foundUser._id)
+      }
+      else{
+        comment.likes.splice(comment.likes.indexOf(foundUser._id),1)
+      }
+      comment.save()
+      .then(function(){
+        res.redirect("back");
+      })
+    })
+  })
+});
 
 
 
@@ -489,9 +610,12 @@ router.post('/updateprofile', upload.single('dp'),isLoggedIn ,async function(req
 
 
 router.get('/profile', isLoggedIn ,async function(req,res,next) {
-  var currentUser =  await usermodel.findOne({username:req.session.passport.user}).populate('post')
+  var currentUser =  await (usermodel.findOne({username:req.session.passport.user})).populate('post')
+  var currentUser2 =  await (usermodel.findOne({username:req.session.passport.user})).populate('savedPosts')
+  // await currentUser.populate('savedPosts')
+  console.log("current user" , currentUser ,"saved",currentUser.savedPosts );
   var post = await postmodel.find().sort({ createdAt: 1 }).populate('user').populate('comments').populate({path: 'comments', populate:('user')});
-  res.render('profile', {currentUser,post});
+  res.render('profile', {currentUser,post,currentUser2});
 });
 
 
