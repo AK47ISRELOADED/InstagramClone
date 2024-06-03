@@ -413,7 +413,7 @@ try {
 
   const upload = multer({
     storage,
-    limits: { fileSize: 1000000000000000 },
+    limits: { fileSize: 1000000 },
   });
 
   router.post("/createPost", upload.single("media"), async (req, res, next) => {
