@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/dm.css">
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+  />
+
+</head>
+<body>
+  <%- include('partials/rainbow.ejs') %>
+  <%- include('partials/sidebar.ejs') %>
+
+    <div id="main">
+        <div id="left">
+            <div id="nav">
+                <h1><%= currentUser.username %></h1>
+                <h4>message</h4>
+                <hr>
+            </div>
+            <div id="users">
+                <% allUsers.forEach(user=>{ %>
+                    <% if(user.username == currentUser.username){ %>
+                        <a style="display: none;" href="/dm/<%= user._id %>"> <div id="user-card"><img src="/uploads/<%= user.image %>" alt="">
+                            <h4><%= user.username %></h4>   </div></a>
+                  <%  } else{ %>
+                    <a href="/dm/<%= user._id %>"> <div id="user-card"><img src="/uploads/<%= user.image %>" alt="">
+                        <h4><%= user.username %></h4>   </div></a>
+                <%  } %>
+              <%  }) %>
+            </div>
+        </div>
+        <hr>
+        <div id="right">
+            <img class="iconn" src="/images/free-instagram-direct-message-ic.png" alt="">
+            <h4 style=" position: absolute;
+            top: 59%;
+            transform: translate(-50%,-50%);
+            left: 65%;" >Send private photos and messages to a friend</h4>
+        </div>
+    </div>
+    <script>    let progressBar = document.querySelector("#rainbow-progress-bar");
+        window.onload = function () {
+          progressBar.style.display = "none";
+        };
+  </script>
+</body>
+</html>

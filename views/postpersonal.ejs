@@ -4,8 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+  />
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+        html,body{
+            height: 100%;
+            width: 100%;
+        }
+        a{
+            color: #000;
+            text-decoration: none;
+        }
+        #main{
+            height: 100vh;
+            width: 100vw;
+            /* background-color: cornflowerblue; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #center{
+            height: 80vh;
+            width: 80vw;
+            /* background-color: cornsilk; */
+            display: flex;
+        }
+        #left{
+            /* background-color: rgb(240, 184, 95); */
+            height: 100%;
+            width: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #left img{
+           height: 100%;
+           width: 100%;
+           /* object-fit: cover; */
+            z-index: 9999999999;
+        }
+        #right{
+            /* background-color: rgb(142, 142, 255); */
+            height: 100%;
+            position: relative;
+            width: 50%;
+            padding: 10px 10px;
+            border: 1px solid #000;
+            overflow: auto;
+        }
+        #head{
+            /* background-color: coral; */
+            /* padding: 2px 20px; */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 300;
+            /* margin-bottom: 5px; */
+            color: #000000d2;
+        }
+        #head h3{
+            font-weight: 500;
+            font-size: 18px;
+        }
+        #mini{
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            border: 2px solid blue;
+            padding: 2px;
+        }
+        #caption{
+            height: max-content;
+            margin-left: 53px;
+            font-size: 19px;
+            margin-bottom: 10px;
+        }
+        #down{
+            /* background-color: darkkhaki; */
+            height: max-content;
+            overflow: auto;
+            /* gap: 10px; */
+            display: flex;
+            flex-direction: column;
+        }
+      .comment-data{
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 10px;
+
+      }
+      .comment-data h4{
+        color: #000000d2;
+        font-weight: 400;
+      }
+      #bottom{
+        position: absolute;
+        bottom: 5px;
+        width: 95%;
+        
+      }
+      #comment-input{
+        width: 100%;
+        /* background-color: blue; */
+        padding: 5px 10px;
+      }
+    </style>
 </head>
 <body>
-    
+    <%- include('partials/rainbow.ejs') -%>
+    <%- include('partials/sidebar.ejs') -%>
+    <div id="main">
+        <div id="center">
+            <div id="left">
+            
+                <img src="/uploads/<%=personalpost.media %>" alt="">
+            </div>
+            <div id="right">               
+                <div id="head">
+                    <img id="mini" src="/uploads/<%= personalpost.user.image %>" alt="">
+                    <h3><%= personalpost.user.username %></h3>
+                </div>
+                <div id="caption">
+                    <h4><%= personalpost.caption %></h4>
+                </div>
+                <hr>
+               <div id="down">
+            
+                <% personalpost.comments.forEach(function(comment){ %>
+                    <div class="comments">
+                      <div class="comment-profile">
+                        <!-- <img src="<%= comment.user.image %>" alt="" /> -->
+                      </div>
+                      <div class="comment-data">
+                        <h4><%= comment.user.username %></h4>
+                        <h3><%= comment.text %></h3>
+                        <small> <%= comment.createdAt.toLocaleString() %> </small>
+                        <div class="comment-review">
+                          <a href=""><i class="ri-reply-line"></i></a>
+                          <a href="/likeComment/<%= comment._id %>">
+                            <% if(comment.likes.includes(currentUser._id)){ %>
+                            <i
+                              id="story-like-btn"
+                              style="color: red"
+                              class="ri-heart-3-fill"
+                            ></i>
+                            <% } else { %>
+                            <i id="story-like-btn" class="ri-heart-3-line"></i>
+                            <% } %></a
+                          >
+                          <a href="/delete/<%= comment._id %>"
+                            ><i class="ri-delete-bin-2-line"></i
+                          ></a>
+                        </div>
+                      </div>
+                    </div>
+                    <% }) %>
+            
+               </div>
+               <div id="bottom">
+                <form action="/addComment/<%= personalpost._id %>" method="post">
+                    <input
+                      id="comment-input"
+                      type="text"
+                      name="comment"
+                      placeholder="write comment to <%= personalpost.user.username %>"
+                    />
+                  </form>
+               </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

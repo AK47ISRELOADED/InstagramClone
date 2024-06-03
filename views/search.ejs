@@ -10,7 +10,7 @@
 </head>
 <body>
 
-
+  <%- include('partials/rainbow.ejs') %>
   <%- include('partials/sidebar.ejs') %>
 
 
@@ -103,11 +103,11 @@
                 </div>
               </div>
               <div id="posts">
-                <% allposts.forEach(function(post){ %>
+                <% allposts.reverse().forEach(function(post){ %>
                 <div class="post">
                   <% if(post.mediaType == 'image/jpeg' || post.mediaType == 'image/jpg' || post.mediaType == 'image/png'){ %>
-                    <img id="feed-img" src="/uploads/<%= post.media %>" alt="haha">   
-            
+                       
+                    <a href="/post/<%= post._id %>"><img id="feed-img" src="/uploads/<%= post.media %>" alt="haha">  </a>
                  <% } else{ %>
                  <a href="/reel/<%= post._id %>"> <video id="feed-video" autoplay  muted loop  src="/uploads/<%= post.media %>"></video></a>
         

@@ -71,11 +71,12 @@
 </head>
 
 <body>
+  <%- include('partials/rainbow.ejs') %>
     <%- include('partials/sidebar.ejs') %>
   <!-- Swiper -->
   <div class="swiper mySwiper">
     <div class="swiper-wrapper">
-        <% allstories.forEach(story=>{ %>
+        <% allstories.reverse().forEach(story=>{ %>
          
          <% if(story.user.username == currentUser.username ) { %>
             <div style="display: none;" class="swiper-slide">

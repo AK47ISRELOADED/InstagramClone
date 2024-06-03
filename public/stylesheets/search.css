@@ -178,8 +178,7 @@ html,body{
     left: 100%;
     /* height: 170px; */
     height:max-content;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    margin-bottom: 5px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
             align-items: center;
@@ -310,6 +309,16 @@ html,body{
     }
     
     .post{
+    width: 19vw;
+    height: 19vw;
+    /* background-color: aqua; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+     flex-shrink: 0;
+
+    }
+    .post>a{
     width: 19vw;
     height: 19vw;
     /* background-color: aqua; */

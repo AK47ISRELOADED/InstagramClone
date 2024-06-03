@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/dm.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <%- include('partials/rainbow.ejs') %> <%- include('partials/sidebar.ejs')
+    %>
+
+    <div id="main">
+      <div id="left">
+        <div id="nav">
+          <h1><%= currentUser.username %></h1>
+          <h4>message</h4>
+          <hr />
+        </div>
+        <div id="users">
+          <% allUsers.forEach(user=>{ %> <% if(user.username ==
+          currentUser.username){ %>
+          <a style="display: none" href="/dm/<%= user._id %>">
+            <div id="user-card">
+              <img src="/uploads/<%= user.image %>" alt="" />
+              <h4><%= user.username %></h4>
+            </div></a
+          >
+          <% } else{ %>
+          <a href="/dm/<%= user._id %>">
+            <div id="user-card">
+              <img src="/uploads/<%= user.image %>" alt="" />
+              <h4><%= user.username %></h4>
+            </div></a
+          >
+          <% } %> <% }) %>
+        </div>
+      </div>
+      <hr />
+      <div id="right">
+        <div id="rnav">
+          <img src="/uploads/<%= user.image %>" alt="" />
+          <h5><%= user.username %></h5>
+        </div>
+        <hr />
+
+        <div style="overflow-y: auto" id="messages">
+          <% allmsg.forEach(msg=>{ %>
+          <!-- <p><%= msg %></p> -->
+
+          <% if(msg.sender_id.toHexString() == currentUser._id.toHexString() &&
+          msg.receiver_id.toHexString() == user._id.toHexString() ){ %>
+          <h1
+            style="
+              text-align: right;
+              /* background-color: cornflowerblue; */
+              color: #0078e8;
+              font-weight: 600;
+              font-size: 20px;
+            "
+          >
+            <%= msg.message %>
+          </h1>
+          <% }else if( msg.sender_id.toHexString() == user._id.toHexString() &&
+          msg.receiver_id.toHexString() == currentUser._id.toHexString() ){ %>
+
+          <h1
+            style="
+              text-align: left;
+              /* background-color: cornflowerblue; */
+              color: #808080;
+              font-weight: 600;
+              font-size: 20px;
+            "
+          >
+            <%= msg.message %>
+          </h1>
+
+          <% } else{ %>
+
+          <h1 style="display: none"><%= msg.message %></h1>
+
+          <% }%> %>
+
+          <!-- <% if(msg.receiver_id.toHexString() == currentUser._id){
+          if(msg.sender_id.toHexString() == currentUser._id.toHexString() ){ %>
+
+          <h1 style="text-align: right; color: cornflowerblue">
+            <%= msg.message %>
+          </h1>
+
+          <% } else if( msg.sender_id.toHexString() == user._id.toHexString() ){
+          %>
+
+          <h1 style="color: red; text-align: left"><%= msg.message %></h1>
+
+          <% } else{ %>
+
+          <h1 style="display: none"><%= msg.message %></h1>
+
+          <% }%> <% } %> -->
+          <% }) %>
+        </div>
+        <div id="message-sender">
+          <form
+            action="/send-msg/<%= user._id %>/<%= currentUser._id %>"
+            method="post"
+          >
+            <i class="ri-user-smile-line"></i>
+            <i class="ri-mic-fill"></i>
+            <i class="ri-gallery-line"></i>
+            <input type="text" name="message" id="message-inp" />
+            <button id="send-button" type="submit">
+              <i class="ri-send-plane-2-line"></i>
+            </button>
+            <i class="ri-heart-line"></i>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      document
+        .querySelector("#send-button")
+        .addEventListener("click", function (eve) {
+          eve.preventDefault();
+          console.log("heyyy");
+          var newMsg = `<div class="msg text-light ms-auto" style="width: fit-content;">
+                            <h2 style="text-align: right;color: cornflowerblue; padding: 5px 10px; border-radius: 5px; ">${
+                              document.querySelector("#message-inp").value
+                            }</h2>
+                          </div>`;
+
+          socket.emit(
+            "senderMsg",
+            document.querySelector("#message-inp").value
+          );
+
+          document.querySelector("#message-inp").value = "";
+          document.querySelector("#messages").innerHTML += newMsg;
+        });
+
+      function receivedMessage(msg) {
+        var newMsg = `<div class="msg text-light" style="width: fit-content;">
+               <h2 style="text-align: left;color: green; background-color: rgb(3, 74, 3); padding: 5px 10px; border-radius: 5px;">${msg}</h2>
+             </div>`;
+        document.querySelector("#messages").innerHTML += newMsg;
+      }
+
+      socket.on("senderMsg", function (msg) {
+        receivedMessage(msg);
+      });
+    </script>
+  </body>
+</html>

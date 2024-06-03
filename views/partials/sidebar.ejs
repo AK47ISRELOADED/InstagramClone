@@ -157,6 +157,22 @@ html,body{
     
     transition: all ease 0.3s;
 }
+#dm22 h5{
+    position: absolute;
+    left: 160%;
+    /* margin-top: 8px; */
+    margin-top: -20px;
+    /* color: #1877F2; */
+    font-weight: 200;
+    /* scale: 5; */
+    background-color: #dedede;
+    padding: 2px 9px;
+    font-size: 16px;
+    display: none;
+    clip-path: polygon(100% 0%, 100% 51%, 100% 100%, 12% 100%, 0% 50%, 12% 0);
+    
+    transition: all ease 0.3s;
+}
 #instagram22 h5{
     display: none;
    color: transparent;
@@ -211,7 +227,7 @@ html,body{
 
 
 
-@media (max-width:500px) {
+@media (max-width:650px) {
    
     #side-bar{
         height: 25px;
@@ -364,6 +380,7 @@ html,body{
 
 #profileimg img{
     width: 30px;
+    height: 30px;
     border-radius: 50%;
 }
 }
@@ -387,6 +404,8 @@ html,body{
         <a id="search22" href="/search"> <i  class="ri-search-2-line"><h5>search</h5></i> </a>
     
         <a id="reel22" href="/reel"><img src="/images/instagram-reel.ico" alt=""> <h5>reels</h5>  </a>
+        <a id="dm22" href="/dm"><i class="ri-send-plane-fill"></i> <h5>Messages</h5>  </a>
+
         <a id="createpost22" href="/createPost"><i class="ri-add-box-line"></i> <h5>create</h5></a>
         <a id="profileimg" href="/profile"><img src="/uploads/<%= currentUser.image %>" alt=""> </a>
     </div>

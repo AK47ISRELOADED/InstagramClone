@@ -387,6 +387,8 @@ span.language {
   </style>
 </head>
 <body>
+
+  <%- include('partials/rainbow.ejs') %>
   
 
   <span id="root">
@@ -480,6 +482,12 @@ span.language {
       window.location=src;
     }
   </script>
+  <script>
+        let progressBar = document.querySelector("#rainbow-progress-bar");
+      window.onload = function () {
+        progressBar.style.display = "none";
+      };
 
+  </script>
 </body>
 </html>

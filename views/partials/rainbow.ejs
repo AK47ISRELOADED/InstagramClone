@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        
+@keyframes rainbow {
+  0% {
+    background-position: 0% 100%;
+  }
+
+  50% {
+    background-position: 100% 200%;
+  }
+
+  100% {
+    background-position: 0% 100%;
+  }
+}
+
+#rainbow-progress-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 100%;
+  z-index: 9999999999999;
+  height: 4px;
+
+  background: linear-gradient(
+    180deg,
+    #ff2400,
+    #e3e81d,
+    #2b1de8,
+    #dd00f3
+  );
+  background-size: 900% 900%;
+
+  animation: rainbow 1.5ss ease infinite;
+}
+
+    </style>
+</head>
+<body>
+    
+    <div id="rainbow-progress-bar"></div>
+
+    <script>    let progressBar = document.querySelector("#rainbow-progress-bar");
+        window.onload = function () {
+          progressBar.style.display = "none";
+        };
+  </script>
+</body>
+</html>

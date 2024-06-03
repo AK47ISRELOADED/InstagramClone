@@ -10,6 +10,7 @@
 
 </head>
 <body>
+  <%- include('partials/rainbow.ejs') %>
   <%- include('partials/sidebar.ejs') %>
 
 
@@ -50,7 +51,7 @@
       <% User.post.reverse().forEach(post=>{ %>
         <div class="post-card">
           <% if(post.mediaType == 'image/jpeg' || post.mediaType == 'image/png'){ %>
-            <img src="/uploads/<%= post.media %>" alt="haha">   
+            <a href="/post/<%= post._id %>"><img src="/uploads/<%= post.media %>" alt=""></a>   
           <h4><%= post.likes.length %><i class="ri-heart-line"></i>  <%= post.comments.length %><i class="ri-chat-3-line"></i>  </h4>     
     
          <% } else{ %>

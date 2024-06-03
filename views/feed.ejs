@@ -1,328 +1,402 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>feed</title>
-  <link rel="stylesheet" href="/stylesheets/feed.css">
-  <link rel="shortcut icon" href="/images/icons8-instagram-32 (1).png" type="image/x-icon">
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>feed</title>
+    <link rel="stylesheet" href="/stylesheets/feed.css" />
+    <link
+      rel="shortcut icon"
+      href="/images/icons8-instagram-32 (1).png"
+      type="image/x-icon"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css"
+    />
+  </head>
+  <body>
+    <%- include('partials/rainbow.ejs') %>
+    <%- include('partials/sidebar.ejs') %>
 
-
-</head>
-<body>
-  <div id="rainbow-progress-bar"></div>
-  <%- include('partials/sidebar.ejs') %>
-
-
-  <div id="main">
- 
-    <div id="logoo">
-      <img src="/images/pngwing.com.png" alt="">
-    </div>
-    <div id="story-bar">
-      <div class="upload-story">
-        <h1>Create Story</h1>
-        <form action="/createStory" method="post">
-          <input type="text" name="media" placeholder="upload story" />
-          <input
-            type="text"
-            name="caption"
-            placeholder="write story caption"
-          />
-          <button>submit</button>
-        </form>
-        <i id="close-upload-story" class="ri-close-line"></i>
+    <div id="main">
+      <div id="logoo">
+        <img src="/images/pngwing.com.png" alt="" />
       </div>
-      <div id="stories">
-        <div class="add-story">
-        <a href="/userstory">  <img src="/uploads/<%= currentUser.image %>"  alt="" /></a>
-          <i id="open-add-story" class="ri-add-fill"></i>
+      <div id="story-bar">
+        <div class="upload-story">
+          <h1>Create Story</h1>
+          <form action="/createStory" method="post">
+            <input type="text" name="media" placeholder="upload story" />
+            <input
+              type="text"
+              name="caption"
+              placeholder="write story caption"
+            />
+            <button>submit</button>
+          </form>
+          <i id="close-upload-story" class="ri-close-line"></i>
         </div>
-        <div class="user-stories">
-         
-       
-            <% allStories.forEach(story=>{ %>
-
-              <% if( story.user.username == currentUser.username ){ %>
-                <div style='display: none;' class="story">
-                  <img style="display: none;" id="story-img1" class="storyimg-<%= story.user.username %>" src="/uploads/<%= story.user.image %>" alt="" />
-                </div>
-             <% } else{ %>
-              <div  class="story">
-               <a href="/veiwstory"> <img id="story-img1" class="storyimg-<%= story.user.username %>" src="/uploads/<%= story.user.image %>" alt="" /></a>
-              </div>
-           <%  } %>
-
-              <%  }) %>
+        <div id="stories">
+          <div class="add-story">
+            <a href="/userstory">
+              <img src="/uploads/<%= currentUser.image %>" alt=""
+            /></a>
+            <i id="open-add-story" class="ri-add-fill"></i>
+          </div>
+          <div class="user-stories">
+            <% allStories.reverse().forEach(story=>{ %> <% if(
+            story.user.username == currentUser.username ){ %>
+            <div style="display: none" class="story">
+              <img
+                style="display: none"
+                id="story-img1"
+                class="storyimg-<%= story.user.username %>"
+                src="/uploads/<%= story.user.image %>"
+                alt=""
+              />
+            </div>
+            <% } else{ %>
+            <div class="story">
+              <a href="/veiwstory">
+                <img
+                  id="story-img1"
+                  class="storyimg-<%= story.user.username %>"
+                  src="/uploads/<%= story.user.image %>"
+                  alt=""
+              /></a>
+            </div>
+            <% } %> <% }) %>
+          </div>
+        </div>
+      </div>
       
+
+      <div id="sugges">
+        <div style="margin-bottom: 10px" class="user-card">
+          <img src="/uploads/<%= currentUser.image %>" alt="" />
+          <h3><%= currentUser.username %></h3>
+          <a
+            style="position: absolute; right: 10%; color: rgb(0, 110, 255)"
+            href="/login"
+            >switch</a
+          >
         </div>
+        <hr />
+        <p
+          style="
+            color: rgb(89, 89, 89);
+            text-transform: capitalize;
+            padding: 5px;
+            font-weight: 600;
+          "
+        >
+          suggestion for you
+        </p>
+        <% allUsers.forEach(function(user){ %> <% if(currentUser.username ==
+        user.username){ %>
+        <div style="display: none" class="user-card">
+          <img src="/uploads/<%= user.image %>" alt="" />
+          <h3><%= user.fullName %></h3>
+          <% if(currentUser.following.includes(user._id)){ %>
+          <a href="/follow/<%= user._id %>"><h2>following</h2></a>
+          <% } else{ %>
+          <a href="/follow/<%= user._id %>"><h2>Follow</h2></a>
+          <% } %>
+          <!-- <a href="/follow/<%= user._id %>"><h2>Follow</h2></a> -->
+        </div>
+        <% } else{ %>
+        <a class="kaka" href="/profile/<%= user._id %>">
+          <div class="user-card">
+            <img src="/uploads/<%= user.image %>" alt="" />
+            <h3><%= user.username %></h3>
+            <% if(currentUser.following.includes(user._id)){ %>
+            <a style="background-color: #17b406" href="/follow/<%= user._id %>"
+              ><h2 style="background-color: #17b406">following</h2></a
+            >
+            <% } else{ %>
+            <a href="/follow/<%= user._id %>"><h2>Follow</h2></a>
+            <% } %>
+            <!-- <a href="/follow/<%= user._id %>"><h2>Follow</h2></a> -->
+          </div></a
+        >
+        <% } %> <% }) %>
       </div>
-    
-    </div>
 
-
-    <div id="feed-area">
-    
-   
-
-      <% allposts.reverse().forEach(post=>{ %>
-
-        <% if(post.user.follower.includes(currentUser._id)) { %>
-          <div id="feed-card">
-            <div id="nav">
-             <a href="/profile/<%= post.user._id %>"> <img id="mini" src="/uploads/<%= post.user.image %>" alt=""></a>
-              <a href="/profile/<%= post.user._id %>"> <h2><%= post.user.username %></h2></a>
+      <div id="feed-area">
+        <% allposts.reverse().forEach(post=>{ %> <%
+        if(post.user.follower.includes(currentUser._id)) { %>
+        <div id="feed-card">
+          <div id="nav">
+            <a href="/profile/<%= post.user._id %>">
+              <img id="mini" src="/uploads/<%= post.user.image %>" alt=""
+            /></a>
+            <a href="/profile/<%= post.user._id %>">
+              <h2><%= post.user.username %></h2></a
+            >
             <div class="more">
-             
-              <i id="open-more-options" class="ri-more-2-line"></i> 
+              <i id="open-more-options" class="ri-more-2-line"></i>
               <div class="more-option">
                 <a href="/deletepost/<%= post._id %>"><h4>Delete Post</h4></a>
-                <a href="/profile/<%= post.user._id %>"><h4>View Profile</h4></a>
+                <a href="/profile/<%= post.user._id %>"
+                  ><h4>View Profile</h4></a
+                >
                 <a href="/savepost/<%= post._id %>"><h4>Save Post</h4></a>
               </div>
             </div>
-            </div>
-            
-            <!-- <img id="feed-img" src="/uploads/<%= post.media %>" alt=""> -->
-            <% if(post.mediaType == 'image/jpeg' || post.mediaType == 'image/jpg' || post.mediaType == 'image/png'){ %>
-              <img id="feed-img" src="/uploads/<%= post.media %>" alt="haha">   
-      
-           <% } else{ %>
-           <a href="/reel/<%= post._id %>"> <video id="feed-video" autoplay controls muted loop  src="/uploads/<%= post.media %>"></video></a>
-  
-         <%  } %>
-            <div id="bottom">
-              <div id="line1">
-                <a href="/like/<%=post._id%>"> <%=post.likes.length%>             
-                  <% if(post.likes.includes(currentUser._id)){ %>
+          </div>
+
+          <!-- <img id="feed-img" src="/uploads/<%= post.media %>" alt=""> -->
+          <% if(post.mediaType == 'image/jpeg' || post.mediaType == 'image/jpg'
+          || post.mediaType == 'image/png'){ %>
+         <a href="/post/<%= post._id %>"> <img id="feed-img" src="/uploads/<%= post.media %>" alt="haha" /></a>
+
+          <% } else{ %>
+          <a href="/reel/<%= post._id %>">
+            <video
+              id="feed-video"
+              autoplay
+              controls
+              muted
+              loop
+              src="/uploads/<%= post.media %>"
+            ></video
+          ></a>
+
+          <% } %>
+          <div id="bottom">
+            <div id="line1">
+              <a href="/like/<%=post._id%>">
+                <%=post.likes.length%> <%
+                if(post.likes.includes(currentUser._id)){ %>
                 <i
                   id="story-like-btn"
                   style="color: red"
                   class="ri-heart-3-fill"
                 ></i>
                 <% } else { %>
+                <i id="story-like-btn" class="ri-heart-3-line"></i>
+                <% } %>
+              </a>
+
+              <i id="comment-icon" class="ri-chat-3-line"></i>
+               <i id="share" class="ri-share-forward-line"></i>
+              <a href="/savepost/<%= post._id %>">
+                <% if(currentUser.savedPosts.includes(post._id)){ %>
                 <i
                   id="story-like-btn"
-                
-                  class="ri-heart-3-line"
+                  style="color: #000"
+                  class="ri-bookmark-fill"
                 ></i>
-                <% } %>
-                </a>
-                
-                <i id="comment-icon" class="ri-chat-3-line"></i>
-                <a href=""> <i class="ri-share-forward-line"></i></a>
-                <a href="/savepost/<%= post._id %>"> 
-                  <% if(currentUser.savedPosts.includes(post._id)){ %>
-                    <i
-                      id="story-like-btn"
-                      style="color: #000"
-                      class="ri-bookmark-fill"
-                    ></i>
-                    <% } else { %>
-                    <i
-                      id="story-like-btn"
-                    
-                    class="ri-bookmark-line"
-                    ></i>
-                    <% } %></a>
-              </div>
-              <div id="line2">
-                <h3><%= post.user.username %></h3>
-                <h3><%= post.caption %></h3>
-              </div>
-              <div class="comment">
-                <h4 id="add-comment">Add a comment</h4>
-                <div class="comments-container">
-                  <% post.comments.forEach(function(comment){ %>
-                  <div class="comments">
-                    <div class="comment-profile">
-                      <img src="<%= comment.user.profilePic %>" alt="" />
-                    </div>
-                    <div class="comment-data">
-                      <h4><%= comment.user.username %></h4>
-                      <h3><%= comment.text %></h3>
-                      <small> <%= comment.createdAt.toLocaleString() %> </small>
-                      <div class="comment-review">
-                        <a href=""><i class="ri-reply-line"></i></a>
-                        <a href="/likeComment/<%= comment._id %>"> <% if(comment.likes.includes(currentUser._id)){ %>
-                          <i
-                            id="story-like-btn"
-                            style="color: red"
-                            class="ri-heart-3-fill"
-                          ></i>
-                          <% } else { %>
-                          <i
-                            id="story-like-btn"
-                          
-                            class="ri-heart-3-line"
-                          ></i>
-                          <% } %></a>
-                        <a href="/delete/<%= comment._id %>"><i class="ri-delete-bin-2-line"></i></a>
-                        
-                      </div>
-                    </div>
-                   
+                <% } else { %>
+                <i id="story-like-btn" class="ri-bookmark-line"></i>
+                <% } %></a
+              >
+            </div>
+            <div id="line2">
+              <h3><%= post.user.username %></h3>
+              <h3><%= post.caption %></h3>
+            </div>
+            <div class="comment">
+              <h4 id="add-comment">Add a comment</h4>
+              <div class="comments-container">
+                <% post.comments.forEach(function(comment){ %>
+                <div class="comments">
+                  <div class="comment-profile">
+                    <img src="<%= comment.user.profilePic %>" alt="" />
                   </div>
-                  <% }) %>
-                  <form action="/addComment/<%= post._id %>" method="post">
-                    <input
-                      id="comment-input"
-                      type="text"
-                      name="comment"
-                      placeholder="write comment to <%= post.user.username %>"
-                    />
-                  </form>
-                </div> 
+                  <div class="comment-data">
+                    <h4><%= comment.user.username %></h4>
+                    <h3><%= comment.text %></h3>
+                    <small> <%= comment.createdAt.toLocaleString() %> </small>
+                    <div class="comment-review">
+                      <a href=""><i class="ri-reply-line"></i></a>
+                      <a href="/likeComment/<%= comment._id %>">
+                        <% if(comment.likes.includes(currentUser._id)){ %>
+                        <i
+                          id="story-like-btn"
+                          style="color: red"
+                          class="ri-heart-3-fill"
+                        ></i>
+                        <% } else { %>
+                        <i id="story-like-btn" class="ri-heart-3-line"></i>
+                        <% } %></a
+                      >
+                      <a href="/delete/<%= comment._id %>"
+                        ><i class="ri-delete-bin-2-line"></i
+                      ></a>
+                    </div>
+                  </div>
+                </div>
+                <% }) %>
+                <form action="/addComment/<%= post._id %>" method="post">
+                  <input
+                    id="comment-input"
+                    type="text"
+                    name="comment"
+                    placeholder="write comment to <%= post.user.username %>"
+                  />
+                </form>
               </div>
-              <div id="lastt">
-                <h6 id="time-posted"><%= post.createdAt.toLocaleString() %></h6>
-
-              </div>
-            </div> 
-  
+            </div>
+            <div id="lastt">
+              <h6 id="time-posted"><%= post.createdAt.toLocaleString() %></h6>
+            </div>
           </div>
-          
+        </div>
+
         <% } else { %>
-          <h5 id="nonnn" >no posts to show here as you have not followed anyone yet. go to the search page to follow users</h5>
-       <% } %>
-    
-       
-      <% }) %>
+        <h5 id="nonnn">
+          no posts to show here as you have not followed anyone yet. go to the
+          search page to follow users
+        </h5>
+        <% } %> <% }) %>
 
-
+        <h5 id="nonnn">
+          no posts to show here as you have not followed anyone yet. go to the
+          search page to follow users
+        </h5>
+      </div>
     </div>
 
-  
-  </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"
+      integrity="sha512-emSwuKiMyYedRwflbZB2ghzX8Cw8fmNVgZ6yQNNXXagFzFOaQmbvQ1vmDkddHjm5AITcBIZfC7k4ShQSjgPAmQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
 
-  <script  src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"integrity="sha512-emSwuKiMyYedRwflbZB2ghzX8Cw8fmNVgZ6yQNNXXagFzFOaQmbvQ1vmDkddHjm5AITcBIZfC7k4ShQSjgPAmQ=="  crossorigin="anonymous"  referrerpolicy="no-referrer"></script>
+    <script>
 
-<script>
-let progressBar = document.querySelector("#rainbow-progress-bar");
-window.onload = function() {
-  progressBar.style.display = 'none';
-};
 
- // CODE TO OPEN COMMENT INPUT FIELD
- var vv = 1;
- document.querySelectorAll('#comment-icon').forEach(element => {
-  element.addEventListener('click',function(){
-   
-    if (vv == 1) {
-      element.parentElement.parentElement.querySelector('#comment-input').style.display = 'block'
-      vv = 2
-    }else{
-      element.parentElement.parentElement.querySelector('#comment-input').style.display = 'none'
-      vv = 1
+  var share =  document.querySelector('#share')
+   share.addEventListener("click",async function(event){
+    console.log(event);
+   })
 
-    }
-  })
- });
-
-  // CODE TO OPEN & CLOSE ADD STORY PAGE
-
-  document.querySelector("#open-add-story").addEventListener("click", function () {
-      document.querySelector(".upload-story").style.scale = "1";
-    });
-
-  document.querySelector("#close-upload-story").addEventListener("click", function () {
-      document.querySelector(".upload-story").style.scale = "0";
-    });
-
-  // CODE TO OPEN & CLOSE MORE OPTIONS
-  var click = 1;
-document.querySelectorAll("#open-more-options").forEach(function (openInput) {
-      
-      openInput.addEventListener("click", function (event) {
-         if (click == 1) {
-         openInput.parentElement.querySelector( ".more-option" ).style.scale = "1";
-          click = 2;
-        } else if (click == 2) {
-     openInput.parentElement.querySelector(
-            ".more-option"
-          ).style.scale = "0";
-          click = 1;
-        }
+      // CODE TO OPEN COMMENT INPUT FIELD
+      var vv = 1;
+      document.querySelectorAll("#comment-icon").forEach((element) => {
+        element.addEventListener("click", function () {
+          if (vv == 1) {
+            element.parentElement.parentElement.querySelector(
+              "#comment-input"
+            ).style.display = "block";
+            vv = 2;
+          } else {
+            element.parentElement.parentElement.querySelector(
+              "#comment-input"
+            ).style.display = "none";
+            vv = 1;
+          }
+        });
       });
-    });
 
-  //CODE FOR FULL VIEW OF STORY
+      // CODE TO OPEN & CLOSE ADD STORY PAGE
 
-  document.querySelectorAll(".story").forEach(function (BigStory) {
-    BigStory.addEventListener("click", function () {
-      document.querySelector(".big-story").style.scale = "1";
-    });
-  });
+      document
+        .querySelector("#open-add-story")
+        .addEventListener("click", function () {
+          document.querySelector(".upload-story").style.scale = "1";
+        });
 
-  // AXIOS CODE FOR LIKING STORY
+      document
+        .querySelector("#close-upload-story")
+        .addEventListener("click", function () {
+          document.querySelector(".upload-story").style.scale = "0";
+        });
 
-  async function like(event,storyId) {
-    var response = await axios.get(`/likeStory/${storyId}`);
-    // console.log(response.data.status)
-    if(response.data.status == "liked"){
-        event.target.style.color = "red"
-    }
-    else{
-        event.target.style.color = "white"
-    }
-  }
-
-  // CODE FOR OPEN DELETE STORY
-
-  document.querySelectorAll("#open-delete-story").forEach(function (DeleteStory) {
+      // CODE TO OPEN & CLOSE MORE OPTIONS
       var click = 1;
-      DeleteStory.addEventListener("click", function (open) {
-        if (click == 1) {
-          open.target.parentElement.querySelector(
-            ".delete-story"
-          ).style.scale = 1;
-          click = 2;
-        } else if (click == 2) {
-          open.target.parentElement.querySelector(
-            ".delete-story"
-          ).style.scale = 0;
-          click = 1;
-        }
+      document
+        .querySelectorAll("#open-more-options")
+        .forEach(function (openInput) {
+          openInput.addEventListener("click", function (event) {
+            if (click == 1) {
+              openInput.parentElement.querySelector(
+                ".more-option"
+              ).style.scale = "1";
+              click = 2;
+            } else if (click == 2) {
+              openInput.parentElement.querySelector(
+                ".more-option"
+              ).style.scale = "0";
+              click = 1;
+            }
+          });
+        });
+
+      //CODE FOR FULL VIEW OF STORY
+
+      document.querySelectorAll(".story").forEach(function (BigStory) {
+        BigStory.addEventListener("click", function () {
+          document.querySelector(".big-story").style.scale = "1";
+        });
       });
-    });
 
+      // AXIOS CODE FOR LIKING STORY
 
-    // var shift = '-94.5vw'
+      async function like(event, storyId) {
+        var response = await axios.get(`/likeStory/${storyId}`);
+        // console.log(response.data.status)
+        if (response.data.status == "liked") {
+          event.target.style.color = "red";
+        } else {
+          event.target.style.color = "white";
+        }
+      }
 
-    // document.querySelector('#next-story').addEventListener('click',(e)=>{
-    //   document.querySelector('.big-story').style.marginLeft += shift
-    // })
-    // document.querySelector('#p-story').addEventListener('click',(e)=>{
-    //   document.querySelector('.big-story').style.marginRight += shift
-    // })
+      // CODE FOR OPEN DELETE STORY
 
+      document
+        .querySelectorAll("#open-delete-story")
+        .forEach(function (DeleteStory) {
+          var click = 1;
+          DeleteStory.addEventListener("click", function (open) {
+            if (click == 1) {
+              open.target.parentElement.querySelector(
+                ".delete-story"
+              ).style.scale = 1;
+              click = 2;
+            } else if (click == 2) {
+              open.target.parentElement.querySelector(
+                ".delete-story"
+              ).style.scale = 0;
+              click = 1;
+            }
+          });
+        });
 
+      // var shift = '-94.5vw'
 
+      // document.querySelector('#next-story').addEventListener('click',(e)=>{
+      //   document.querySelector('.big-story').style.marginLeft += shift
+      // })
+      // document.querySelector('#p-story').addEventListener('click',(e)=>{
+      //   document.querySelector('.big-story').style.marginRight += shift
+      // })
 
-    // ---------------------------------------------------------------------
+      // ---------------------------------------------------------------------
 
-    // function reset() {
-    //     document.querySelectorAll(".suggestion").forEach(function (change) {
-    //       change.style.backgroundColor = "rgb(157, 161, 157)";
-    //       change.style.color = "white";
-    //     });
-    //     document
-    //       .querySelectorAll(".suggestion i")
-    //       .forEach(function (changeIcon) {
-    //         changeIcon.style.transform = "rotateX(0deg)";
-    //       });
-    //   }
+      // function reset() {
+      //     document.querySelectorAll(".suggestion").forEach(function (change) {
+      //       change.style.backgroundColor = "rgb(157, 161, 157)";
+      //       change.style.color = "white";
+      //     });
+      //     document
+      //       .querySelectorAll(".suggestion i")
+      //       .forEach(function (changeIcon) {
+      //         changeIcon.style.transform = "rotateX(0deg)";
+      //       });
+      //   }
 
-
-    // document.querySelectorAll(".storyimg-adarshkaurav.47").forEach(story=>{
-    //   console.log(haha);
-    // })
-
-
-
-</script>
-</body>
+      // document.querySelectorAll(".storyimg-adarshkaurav.47").forEach(story=>{
+      //   console.log(haha);
+      // })
+    </script>
+  </body>
 </html>
-  

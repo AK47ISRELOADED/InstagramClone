@@ -10,8 +10,10 @@
 
 </head>
 <body>
+  
+  
+  <%- include('partials/rainbow.ejs') %>
   <%- include('partials/sidebar.ejs') %>
-
 
   <div id="main">
     <div id="formm">
@@ -59,7 +61,7 @@
       <% currentUser.post.reverse().forEach(post=>{ %>
         <div class="post-card">
           <% if(post.mediaType == 'image/jpeg' || post.mediaType == 'image/png'){ %>
-            <img src="/uploads/<%= post.media %>" alt="haha">   
+           <a href="/post/<%= post._id %>"> <img src="/uploads/<%= post.media %>" alt="haha">  </a> 
           <h4><%= post.likes.length %><i class="ri-heart-line"></i>  <%= post.comments.length %><i class="ri-chat-3-line"></i>  </h4>     
     
          <% } else{ %>
@@ -94,10 +96,10 @@
 
 
      <div id="saved-gallery">
-      <% currentUser2.post.forEach(post=>{ %>
+      <% currentUser2.savedPosts.forEach(post=>{ %>
         <div class="saved-card">
           <h1><%=post%></h1>
-         <img src="/uploads/<%= post.media %>" alt="4 ">
+         <img src="/uploads/<%= post.media %>" alt=" ">
          <video src="/uploads/<%= post.media %>" autoplay muted loop ></video>
         </div>
      
@@ -109,6 +111,8 @@
   </div>
 
   <script>
+
+
     document.querySelector('#reels-tag').addEventListener('click',function(){
       document.querySelector('#reels-gallery').style.display = 'grid';
       document.querySelector('#post-gallery').style.display = 'none';
